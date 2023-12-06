@@ -1,9 +1,17 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 dotenv.config();
 
 const app = express();
+
+// Connect to DB
+mongoose.connect(process.env.DB_URL)
+.then(() => console.log(`MongoDB Connected Successfully...`))
+    .catch(err => console.log(err)
+);
+
 
 // Morgan Middleware
 if (process.env.NODE_ENV === 'development') {
@@ -17,9 +25,6 @@ app.get('/', (req, res) => {
         message: 'Hello World!'
     });
 });
-
-
-
 
 
 
