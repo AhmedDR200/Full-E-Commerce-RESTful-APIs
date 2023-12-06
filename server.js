@@ -1,16 +1,17 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
+const catsRoutes = require('./routes/catRoute');
 dotenv.config();
 
 const app = express();
 
-// Connect to DB
+// Database connection
+const mongoose = require('mongoose');
 mongoose.connect(process.env.DB_URL)
-.then(() => console.log(`MongoDB Connected Successfully...`))
-    .catch(err => console.log(err)
-);
+.then(() => console.log('DB Connected Successfully ...'))
+.catch(err => console.log(err));
+
 
 
 // Morgan Middleware
@@ -18,13 +19,12 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+// Body Parser Middleware
+app.use(express.json());
 
 
-app.get('/', (req, res) => {
-    res.json({
-        message: 'Hello World!'
-    });
-});
+// Routes
+app.use('/', catsRoutes);
 
 
 
