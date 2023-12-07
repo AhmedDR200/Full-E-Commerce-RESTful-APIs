@@ -20,7 +20,10 @@ router.route('/')
 .get(getSubCategories)
 .post(createSubCategoryValidator, createSubCategory);
 
-
+router.route('/:id')
+.get(getSubCategoryValidator, getSubCategory)
+.patch(updateSubCategoryValidator, updateSubCategory)
+.delete(deleteSubCategoryValidator, deleteSubCategory);
 
 
 module.exports = router;

@@ -10,7 +10,13 @@ const SubCategory = require('../models/subCategory');
 // @access  Public
 const getSubCategories = asyncHandler(
     async (req, res) => {
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 5;
+        const skip = (page - 1) * limit;
+
         const SubCategories = await SubCategory.find()
+        .skip(skip)
+        .limit(limit)
         .populate('category', 'name');
 
         res.json({
@@ -42,7 +48,8 @@ const createSubCategory = asyncHandler(
 // @access  Public
 const getSubCategory = asyncHandler(async (req, res) => {
     const id = req.params.id;
-    const subCategory = await SubCategory.findById(id);
+    const subCategory = await SubCategory.findById(id)
+      .populate('category', 'name');
   
     if (!subCategory) {
       return next(new ApiError(`No subCategory found with that ID: ${id}`, 404));
@@ -60,7 +67,8 @@ const getSubCategory = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const updateSubCategory = asyncHandler(async (req, res) => {
     const id = req.params.id;
-    const subCategory = await SubCategory.findById(id);
+    const subCategory = await SubCategory.findById(id)
+    .populate('category', 'name');
   
     if (!subCategory) {
       return next(new ApiError(`No subCategory found with that ID: ${id}`, 404));
