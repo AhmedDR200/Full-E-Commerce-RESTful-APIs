@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const catsRoutes = require('./routes/catRoute');
 const ApiError = require('./utils/apiError');
+const globalError = require('./middlewares/errorMiddleware');
 dotenv.config();
 
 const app = express();
@@ -38,17 +39,7 @@ app.all('*', (req, res, next) => {
 
 
 // Global Error Handling Middleware
-app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || 'error';
-
-    res.status(err.statusCode).json({
-        status: err.status,
-        error: err,
-        message: err.message,
-        stack: err.stack
-    });
-});
+app.use(globalError);
 
 
 
