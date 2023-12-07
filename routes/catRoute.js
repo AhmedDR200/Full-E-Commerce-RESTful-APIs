@@ -1,15 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const {getCategories,
-       createCategory,
-       getCategory,
-       updateCategory,
-       deleteCategory} = require('../controllers/catController');
+
+const 
+{getCategories,
+createCategory,
+getCategory,
+updateCategory,
+deleteCategory} 
+= require('../controllers/catController');
+
 const 
 {getCategoryValidator,
 createCategoryValidator,
 updateCategoryValidator,
-deleteCategoryValidator} = require('../validators/catValidator');
+deleteCategoryValidator} 
+= require('../validators/catValidator');
 
 
 

@@ -9,10 +9,8 @@ dotenv.config();
 const app = express();
 
 // Database connection
-const mongoose = require('mongoose');
-mongoose.connect(process.env.DB_URL)
-.then(() => console.log('DB Connected Successfully ...'))
-.catch(err => console.log(err));
+const dbConnection = require('./config/db');
+dbConnection();
 
 
 // Body Parser Middleware

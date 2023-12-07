@@ -12,7 +12,10 @@ const categorySchema = new mongoose.Schema({
   slug:{
     type: String,
     lowercase: true,
-  }
+  },
+  image:{
+    type: String
+  },
 },{
   versionKey: false,
   timestamps: true
