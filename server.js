@@ -47,3 +47,11 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`server (${process.env.NODE_ENV}) listening at http://localhost:${port}`)
 });
+
+
+// Events => Event Loop => Callback Queue => Event Loop => Event Handler
+process.on('uncaughtException', (err) => {
+    console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+    console.log(err);
+    process.exit(1);
+});
