@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const catsRoutes = require('./routes/catRoute');
+const ApiError = require('./utils/apiError');
 dotenv.config();
 
 const app = express();
@@ -29,18 +30,23 @@ app.use('/cats', catsRoutes);
 
 // 404 Error Handling Middleware
 app.all('*', (req, res, next) => {
-    const err = new Error(`Can't find ${req.originalUrl} on this server`);
-    err.status = 'fail';
-    err.statusCode = 404;
-    next(err);
+    // const err = new Error(`Can't find ${req.originalUrl} on this server`);
+    // err.status = 'fail';
+    // err.statusCode = 404;
+    next(new ApiError(`Can't find ${req.originalUrl} on this server`, 400));
 });
 
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
-    res.status(400).json({
-        success: false,
-        error: err.message
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || 'error';
+
+    res.status(err.statusCode).json({
+        status: err.status,
+        error: err,
+        message: err.message,
+        stack: err.stack
     });
 });
 
