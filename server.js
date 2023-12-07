@@ -24,7 +24,7 @@ app.use(express.json());
 
 
 // Routes
-app.use('/', catsRoutes);
+app.use('/cats', catsRoutes);
 
 
 
