@@ -5,19 +5,23 @@ const {getCategories,
        getCategory,
        updateCategory,
        deleteCategory} = require('../controllers/catController');
-const getCategoryValidator = require('../validators/catValidator');
+const 
+{getCategoryValidator,
+createCategoryValidator,
+updateCategoryValidator,
+deleteCategoryValidator} = require('../validators/catValidator');
 
 
 
 router.route('/')
 .get(getCategories)
-.post(createCategory);
+.post(createCategoryValidator,createCategory);
 
 
 router.route('/:id')
 .get(getCategoryValidator,getCategory)
 
-.patch(updateCategory)
-.delete(deleteCategory);
+.patch(updateCategoryValidator, updateCategory)
+.delete(deleteCategoryValidator, deleteCategory);
 
 module.exports = router;
