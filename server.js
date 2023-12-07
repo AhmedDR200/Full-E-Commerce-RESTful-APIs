@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const catsRoutes = require('./routes/catRoute');
+const SubCatRoutes = require('./routes/subCatRoute');
 const ApiError = require('./utils/apiError');
 const globalError = require('./middlewares/errorMiddleware');
 dotenv.config();
@@ -25,6 +26,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // Routes
 app.use('/cats', catsRoutes);
+app.use('/subCats', SubCatRoutes);
 
 
 // 404 Error Handling Middleware
