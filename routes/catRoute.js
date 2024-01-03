@@ -18,14 +18,16 @@ deleteCategoryValidator}
 
 
 
+
 router.route('/')
 .get(getCategories)
 .post(createCategoryValidator,createCategory);
 
+const subCatRoutes = require('./subCatRoute');
+router.use('/:catId/subCats', subCatRoutes);
 
 router.route('/:id')
 .get(getCategoryValidator,getCategory)
-
 .patch(updateCategoryValidator, updateCategory)
 .delete(deleteCategoryValidator, deleteCategory);
 

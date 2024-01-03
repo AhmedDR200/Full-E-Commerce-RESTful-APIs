@@ -16,10 +16,12 @@ const categorySchema = new mongoose.Schema({
   image:{
     type: String
   },
-},{
+},
+{
   versionKey: false,
   timestamps: true
 });
+
 
 const Category = mongoose.model('Category', categorySchema);
 

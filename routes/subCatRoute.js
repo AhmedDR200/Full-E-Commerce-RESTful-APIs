@@ -1,5 +1,8 @@
 const express = require('express');
-const router = express.Router();
+
+// mergeParams: true is required to access the params of the parent router
+const router = express.Router({mergeParams : true});
+
 const{getSubCategories,
      createSubCategory,
      getSubCategory,
@@ -19,6 +22,7 @@ const{getSubCategoryValidator,
 router.route('/')
 .get(getSubCategories)
 .post(createSubCategoryValidator, createSubCategory);
+
 
 router.route('/:id')
 .get(getSubCategoryValidator, getSubCategory)

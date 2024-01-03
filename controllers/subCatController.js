@@ -4,7 +4,8 @@ const ApiError = require('../utils/apiError');
 const SubCategory = require('../models/subCategory');
 
 
-
+// @desc    Fetch all subCategories for Specific Category
+// @route   GET /:catId/subCats
 // @desc    Fetch all subCategories
 // @route   GET /subCats
 // @access  Public
@@ -14,10 +15,15 @@ const getSubCategories = asyncHandler(
         const limit = req.query.limit || 5;
         const skip = (page - 1) * limit;
 
-        const SubCategories = await SubCategory.find()
+        let filterObject = {};
+        if (req.query.category) {
+          filterObject = { category: req.params.catId }; // Use req.params.catId instead of req.query.id
+        }
+
+        const SubCategories = await SubCategory.find(filterObject)
         .skip(skip)
         .limit(limit)
-        .populate('category', 'name');
+        .populate({path: 'category', select: 'name'});
 
         res.json({
             status: 'success',
@@ -49,7 +55,7 @@ const createSubCategory = asyncHandler(
 const getSubCategory = asyncHandler(async (req, res) => {
     const id = req.params.id;
     const subCategory = await SubCategory.findById(id)
-      .populate('category', 'name');
+      .populate({ path: 'category', select: 'name' });
   
     if (!subCategory) {
       return next(new ApiError(`No subCategory found with that ID: ${id}`, 404));
@@ -107,6 +113,7 @@ const deleteSubCategory = asyncHandler(async (req, res) => {
 });
 
 
+// Exporting
 module.exports = {
     getSubCategories,
     createSubCategory,
