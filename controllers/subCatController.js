@@ -33,6 +33,12 @@ const getSubCategories = asyncHandler(
 });
 
 
+// Middleware to set category id to body
+const setCatIdToBody = (req, res, next) => {
+  if (!req.body.category) req.body.category = req.params.catId;
+  next();
+};
+
 // @desc    create a subCategory
 // @route   POST /subCats
 // @access  Private/Admin
@@ -119,5 +125,6 @@ module.exports = {
     createSubCategory,
     getSubCategory,
     updateSubCategory,
-    deleteSubCategory
+    deleteSubCategory,
+    setCatIdToBody
 };

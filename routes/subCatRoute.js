@@ -7,7 +7,8 @@ const{getSubCategories,
      createSubCategory,
      getSubCategory,
      updateSubCategory,
-     deleteSubCategory}
+     deleteSubCategory,
+     setCatIdToBody}
 = require('../controllers/subCatController');
 
 const{getSubCategoryValidator,
@@ -21,7 +22,7 @@ const{getSubCategoryValidator,
 
 router.route('/')
 .get(getSubCategories)
-.post(createSubCategoryValidator, createSubCategory);
+.post(setCatIdToBody,createSubCategoryValidator, createSubCategory);
 
 
 router.route('/:id')
