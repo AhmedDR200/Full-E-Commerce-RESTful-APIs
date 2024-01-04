@@ -1,5 +1,7 @@
 const { check } = require('express-validator');
 const validetorMiddleware = require('../middlewares/validetorMiddleware');
+const Category = require('../models/category');
+const SubCategory = require('../models/subCategory');
 
 
 const getProductValidator =  [
@@ -41,7 +43,41 @@ const createProductValidator = [
         .notEmpty()
         .withMessage('Product Category is Required !')
         .isMongoId()
-        .withMessage('Invalid Category ID Provided !'),
+        .withMessage('Invalid Category ID Provided !')
+        .custom((category) => 
+            Category.findById(category).then(category => {
+                if(!category) {
+                    return Promise.reject(
+                        new Error(`Category Not Found For This ID: ${category} !`)
+                    );
+                }
+            })),
+    check('subcategories')
+        .optional()
+        .isArray()
+        .withMessage('Product SubCategories must be an array !')
+        .custom((subcategories) => 
+            SubCategory.find({_id: {$exists: true, $in: subcategories}}).then(
+                (result) => {
+                if(result.length < 1 || result.length !== subcategories.length) {
+                    return Promise.reject(
+                        new Error(`SubCategories Not Found For This IDs: ${subcategories} !`)
+                    );
+                }
+            }))
+        .custom((val, { req }) => SubCategory.find({category: req.body.category}).then((subcategories)=>{
+            const subcategoriesIds = [];
+            subcategories.forEach((subcategory) => {
+                subcategoriesIds.push(subcategory._id.toString());
+            });
+            // check if subcategories ids in subcategoriesIds array
+            const checker = val.every((value) => subcategoriesIds.includes(value));
+            if(!checker) {
+                return Promise.reject(
+                    new Error(`SubCategories Not Found For This IDs: ${val} !`)
+                );
+            }
+        })),        
     check('images')
         .optional()
         .isArray()

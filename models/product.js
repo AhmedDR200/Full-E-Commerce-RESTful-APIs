@@ -35,10 +35,12 @@ const productSchema = new mongoose.Schema({
         ref: 'Category',
         required: [true, 'Product category is required'],
     },
-    subcategory:{
+    subcategories:[
+        {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SubCategory'
-    },
+        },
+    ],
     brand:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Brand'
