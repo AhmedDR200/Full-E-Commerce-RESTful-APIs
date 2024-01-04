@@ -9,22 +9,32 @@ const ApiError = require('../utils/apiError');
 // @access  Public
 const getProducts = asyncHandler(
     async (req, res) => {
+        //Filtering
+        const queryObj = { ...req.query };
+        const excludedFields = ['page', 'sort', 'limit', 'fields'];
+        excludedFields.forEach(el => delete queryObj[el]);
+        // Advanced filtering
+        let queryStr = JSON.stringify(queryObj);
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+        console.log(queryObj);
+        // Pagination
         const page = parseInt(req.query.page) || 1; // or * 1
-        const limit = parseInt(req.query.limit) || 5;
+        const limit = parseInt(req.query.limit) || 50;
         const skip = (page - 1) * limit;
 
-        const products = await Product.find()
+        const products = await Product.find(JSON.parse(queryStr))
         .skip(skip)
         .limit(limit)
         .populate([
             { path: 'category', select: 'name' },
-            { path: 'subcategory', select: 'name'},
+            { path: 'subcategories', select: 'name'},
             { path: 'brand', select: 'name' }
         ]);
 
         res.json({
             status: 'success',
             results: products.length,
+            page,
             data: {products}
         });
 });
