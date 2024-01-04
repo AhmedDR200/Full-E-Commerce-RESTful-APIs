@@ -21,8 +21,8 @@ const getProducts = asyncHandler(
         const page = parseInt(req.query.page) || 1; // or * 1
         const limit = parseInt(req.query.limit) || 50;
         const skip = (page - 1) * limit;
-
-        const products = await Product.find(JSON.parse(queryStr))
+        // Building query
+        let mogooseQuery = Product.find(JSON.parse(queryStr))
         .skip(skip)
         .limit(limit)
         .populate([
@@ -30,6 +30,24 @@ const getProducts = asyncHandler(
             { path: 'subcategories', select: 'name'},
             { path: 'brand', select: 'name' }
         ]);
+        // Sorting
+        if(req.query.sort){
+            const sortBy = req.query.sort.split(',').join(' ');
+            mogooseQuery = mogooseQuery.sort(sortBy);
+        }
+        else {
+            mogooseQuery = mogooseQuery.sort('-createdAt');
+        };
+        // Field limiting
+        if(req.query.fields){
+            const fields = req.query.fields.split(',').join(' ');
+            mogooseQuery = mogooseQuery.select(fields);
+        }
+        else {
+            mogooseQuery = mogooseQuery.select('-__v');
+        };
+        // Executing query
+        const products = await mogooseQuery;
 
         res.json({
             status: 'success',
