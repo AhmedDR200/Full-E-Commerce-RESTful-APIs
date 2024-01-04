@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const asyncHandler = require('express-async-handler');
 const slugify = require('slugify');
 const ApiError = require('../utils/apiError');
+// const ApiFeatures = require('../utils/apiFeatures');
 
 
 // @desc    Fetch all products
@@ -13,14 +14,17 @@ const getProducts = asyncHandler(
         const queryObj = { ...req.query };
         const excludedFields = ['page', 'sort', 'limit', 'fields'];
         excludedFields.forEach(el => delete queryObj[el]);
+
         // Advanced filtering
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
         console.log(queryObj);
+
         // Pagination
         const page = parseInt(req.query.page) || 1; // or * 1
         const limit = parseInt(req.query.limit) || 50;
         const skip = (page - 1) * limit;
+
         // Building query
         let mogooseQuery = Product.find(JSON.parse(queryStr))
         .skip(skip)
@@ -30,6 +34,7 @@ const getProducts = asyncHandler(
             { path: 'subcategories', select: 'name'},
             { path: 'brand', select: 'name' }
         ]);
+
         // Sorting
         if(req.query.sort){
             const sortBy = req.query.sort.split(',').join(' ');
@@ -38,6 +43,7 @@ const getProducts = asyncHandler(
         else {
             mogooseQuery = mogooseQuery.sort('-createdAt');
         };
+
         // Field limiting
         if(req.query.fields){
             const fields = req.query.fields.split(',').join(' ');
@@ -46,6 +52,17 @@ const getProducts = asyncHandler(
         else {
             mogooseQuery = mogooseQuery.select('-__v');
         };
+
+        // Searching
+        if(req.query.keyword){
+            const query = {};
+            query.$or = [
+                {title: { $regex: req.query.keyword, $options: 'i'}},
+                {description: { $regex: req.query.keyword, $options: 'i'}}
+            ];
+            mogooseQuery = mogooseQuery.find(query);
+        };
+        
         // Executing query
         const products = await mogooseQuery;
 
