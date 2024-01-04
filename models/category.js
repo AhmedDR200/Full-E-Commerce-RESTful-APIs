@@ -14,7 +14,7 @@ const categorySchema = new mongoose.Schema({
     lowercase: true,
   },
   image:{
-    type: String
+    type: String,
   },
 },
 {

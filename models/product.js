@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema({
         required: [true, 'Product name is required'],
         unique: [true, 'Product name must be unique'],
         minleangth: [3, 'Product name must be at least 3 characters long'],
-        maxleangth: [35, 'Product name must be at most 20 characters long'],
+        maxleangth: [100, 'Product name must be at most 20 characters long'],
         trim: true,
     },
     slug:{
@@ -37,7 +37,7 @@ const productSchema = new mongoose.Schema({
     },
     subcategory:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Subcategory'
+        ref: 'SubCategory'
     },
     brand:{
         type: mongoose.Schema.Types.ObjectId,
@@ -79,5 +79,5 @@ const productSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Product = mongoose.model('Brand', productSchema);
+const Product = mongoose.model('Product', productSchema);
 module.exports = Product;
