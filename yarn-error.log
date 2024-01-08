@@ -1,0 +1,53 @@
+Arguments: 
+  /snap/node/7823/bin/node /snap/node/7823/bin/yarn.js add sharp --ignore-engines
+
+PATH: 
+  /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.18.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: EACCES: permission denied, unlink '/home/ahmed810/Desktop/Node js/Full E-Commerce RESTful APIs - Node js/Full-E-Commerce-RESTful-APIs/node_modules/@img/.sharp-libvips-linuxmusl-x64-okITYBw4/README.md'
+
+npm manifest: 
+  {
+    "name": "full-e-commerce-restful-apis",
+    "version": "1.0.0",
+    "description": "NodeJS - Full E-Commerce RESTful APIs",
+    "main": "server.js",
+    "scripts": {
+      "start": "nodemon server.js",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "@img/sharp-linux-x64": "^0.33.1",
+      "@types/mongoose": "^5.11.97",
+      "colors": "^1.4.0",
+      "dotenv": "^16.3.1",
+      "express": "^4.18.2",
+      "express-async-handler": "^1.2.0",
+      "express-validator": "^7.0.1",
+      "mongoose": "^8.0.3",
+      "morgan": "^1.10.0",
+      "multer": "^1.4.5-lts.1",
+      "sharp": "^0.33.1",
+      "slugify": "^1.6.6",
+      "uuid": "^9.0.1"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

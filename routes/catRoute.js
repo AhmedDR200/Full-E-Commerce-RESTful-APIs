@@ -7,7 +7,8 @@ createCategory,
 getCategory,
 updateCategory,
 deleteCategory,
-uploadCategoryImage} 
+uploadCategoryImage,
+resizeCategoryImage} 
 = require('../controllers/catController');
 
 const 
@@ -23,6 +24,7 @@ router.route('/')
 .get(getCategories)
 .post(
     uploadCategoryImage,
+    resizeCategoryImage,
     createCategoryValidator,
     createCategory
 );
