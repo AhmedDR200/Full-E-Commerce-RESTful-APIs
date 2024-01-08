@@ -1,6 +1,29 @@
 const Category = require('../models/category');
 const factory = require('./handelers')
+const multer = require('multer');
+const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const path = require('path');
 
+const uploadDir = '../uploads/categories';
+
+fs.mkdirSync(path.join(__dirname, uploadDir), { recursive: true });
+
+const multerStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, path.join(__dirname, uploadDir))
+    },
+    filename: function (req, file, cb) {
+      const ext = file.mimetype.split('/')[1];  
+      const filename = `category-${uuidv4()}-${Date.now()}.${ext}`
+      cb(null, filename)
+    }
+});
+  
+const upload = multer({ storage: multerStorage });
+
+// Image upload
+const uploadCategoryImage = upload.single("image");
 
 
 // @desc    Fetch all categories
@@ -40,5 +63,6 @@ module.exports = {
     createCategory,
     getCategory,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    uploadCategoryImage
 }

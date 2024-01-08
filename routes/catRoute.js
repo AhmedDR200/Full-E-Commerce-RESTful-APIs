@@ -6,7 +6,8 @@ const
 createCategory,
 getCategory,
 updateCategory,
-deleteCategory} 
+deleteCategory,
+uploadCategoryImage} 
 = require('../controllers/catController');
 
 const 
@@ -18,10 +19,13 @@ deleteCategoryValidator}
 
 
 
-
 router.route('/')
 .get(getCategories)
-.post(createCategoryValidator,createCategory);
+.post(
+    uploadCategoryImage,
+    createCategoryValidator,
+    createCategory
+);
 
 const subCatRoutes = require('./subCatRoute');
 router.use('/:catId/subCats', subCatRoutes);
