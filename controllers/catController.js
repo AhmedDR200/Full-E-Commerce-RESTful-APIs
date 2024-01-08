@@ -19,8 +19,16 @@ const multerStorage = multer.diskStorage({
       cb(null, filename)
     }
 });
+
+const multerFilter = (req, file, cb) => {
+    if(file.mimetype.startsWith('image')){
+        cb(null, true)
+    }else{
+        cb(new Error('Not an image! Please upload only images.'), false)
+    }
+};
   
-const upload = multer({ storage: multerStorage });
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
 // Image upload
 const uploadCategoryImage = upload.single("image");
