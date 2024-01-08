@@ -1,5 +1,6 @@
-const { check } = require('express-validator');
+const { check, body } = require('express-validator');
 const validetorMiddleware = require('../middlewares/validetorMiddleware');
+const slugify = require('slugify');
 
 
 const getSubCategoryValidator =  [
@@ -16,6 +17,10 @@ const createSubCategoryValidator = [
     .withMessage('SubCategory Name is Required !')
     .isLength({min:2, max:35})
     .withMessage('SubCategory Name must be between 2 to 35 characters !')
+    .custom((val, {req}) => {
+        req.body.slug = slugify(val);
+        return true;
+    })
     ,validetorMiddleware
 ]
 
@@ -25,7 +30,13 @@ const updateSubCategoryValidator = [
     .notEmpty()
     .withMessage('SubCategory Name is Required !')
     .isLength({min:2, max:35})
-    .withMessage('SubCategory Name must be between 2 to 35 characters !')
+    .withMessage('SubCategory Name must be between 2 to 35 characters !'),
+    body('name')
+    .optional()
+    .custom((val, {req}) => {
+        req.body.slug = slugify(val);
+        return true;
+    })
     ,validetorMiddleware
 ]
 

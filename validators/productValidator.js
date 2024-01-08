@@ -1,7 +1,8 @@
-const { check } = require('express-validator');
+const { check, body } = require('express-validator');
 const validetorMiddleware = require('../middlewares/validetorMiddleware');
 const Category = require('../models/category');
 const SubCategory = require('../models/subCategory');
+const slugify = require('slugify');
 
 
 const getProductValidator =  [
@@ -17,7 +18,11 @@ const createProductValidator = [
         .notEmpty()
         .withMessage('Product Title is Required !')
         .isLength({min:3, max:100})
-        .withMessage('Product Title must be between 3 to 35 characters !'),
+        .withMessage('Product Title must be between 3 to 35 characters !')
+        .custom((val, {req}) => {
+            req.body.slug = slugify(val);
+            return true;
+        }),
     check('description')
         .notEmpty()
         .withMessage('Product Description is Required !')
@@ -100,7 +105,13 @@ const updateProductValidator = [
     .notEmpty()
     .withMessage('Product Title is Required !')
     .isLength({min:3, max:100})
-    .withMessage('Product Title must be between 3 to 35 characters !')
+    .withMessage('Product Title must be between 3 to 35 characters !'),
+    body('title')
+        .optional()
+        .custom((val, {req}) => {
+            req.body.slug = slugify(val);
+            return true;
+        })
     ,validetorMiddleware
 ]
 
