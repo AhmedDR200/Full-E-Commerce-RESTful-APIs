@@ -48,6 +48,9 @@ const resizeCategoryImage = asyncHandler(async (req, res, next) => {
   .quality(90)
   .write(`uploads/categories/${filename}`);
 
+ // save the image to DataBase   
+  req.body.image = filename;
+
   next();
 });
 

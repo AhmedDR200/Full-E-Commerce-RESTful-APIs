@@ -1,3 +1,7 @@
+// Core Moudles
+const path = require('path')
+
+// 3rd Party Moudles
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -21,6 +25,9 @@ dbConnection();
 
 // Body Parser Middleware
 app.use(express.json());
+
+// Static Files Middleware
+app.use(express.static(path.join(__dirname, 'uploads')))
 
 
 // Morgan Middleware
