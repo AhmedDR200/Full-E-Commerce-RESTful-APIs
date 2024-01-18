@@ -1,6 +1,28 @@
 const Brand = require('../models/brand');
 const factory = require('./handelers')
+const asyncHandler = require('express-async-handler');
+const sharp = require('sharp');
+const { v4: uuidv4 } = require('uuid');
+const {uploadSingleImage} = require('../middlewares/uploadImages')
 
+// Image upload
+const uploadBrandImage = uploadSingleImage("image");
+
+
+const resizeBrandImage = asyncHandler(async (req, res, next) => {
+  const filename = `brand-${uuidv4()}-${Date.now()}.jpeg`;
+
+  await sharp(req.file.buffer)
+  .resize(600, 600)
+  .toFormat('jpeg')
+  .jpeg({ quality: 95})
+  .toFile(`uploads/categories/${filename}`)
+
+ // save the image to DataBase   
+  req.body.image = filename;
+
+  next();
+});
 
 
 // @desc    Fetch all brands
@@ -37,5 +59,7 @@ module.exports = {
     createBrand,
     getBrand,
     updateBrand,
-    deleteBrand
+    deleteBrand,
+    uploadBrandImage,
+    resizeBrandImage
 }

@@ -1,9 +1,9 @@
 const Category = require('../models/category');
 const factory = require('./handelers')
 const asyncHandler = require('express-async-handler');
-const multer = require('multer');
-const Jimp = require('jimp');
+const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');
+const {uploadSingleImage} = require('../middlewares/uploadImages')
 // const fs = require('fs');
 // const path = require('path');
 
@@ -24,29 +24,30 @@ const { v4: uuidv4 } = require('uuid');
 // });
 
 // 2- Memory Storage for multer
-const multerStorage = multer.memoryStorage();
+// const multerStorage = multer.memoryStorage();
 
-const multerFilter = (req, file, cb) => {
-    if(file.mimetype.startsWith('image')){
-        cb(null, true)
-    }else{
-        cb(new Error('Not an image! Please upload only images.'), false)
-    }
-};
+// const multerFilter = (req, file, cb) => {
+//     if(file.mimetype.startsWith('image')){
+//         cb(null, true)
+//     }else{
+//         cb(new Error('Not an image! Please upload only images.'), false)
+//     }
+// };
   
-const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
+// const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
 // Image upload
-const uploadCategoryImage = upload.single("image");
+const uploadCategoryImage = uploadSingleImage("image");
 
-
+// Image proccessing
 const resizeCategoryImage = asyncHandler(async (req, res, next) => {
   const filename = `category-${uuidv4()}-${Date.now()}.jpeg`;
 
-  const image = await Jimp.read(req.file.buffer);
-  image.resize(600, 600)
-  .quality(90)
-  .write(`uploads/categories/${filename}`);
+  await sharp(req.file.buffer)
+  .resize(600, 600)
+  .toFormat('jpeg')
+  .jpeg({ quality: 95})
+  .toFile(`uploads/categories/${filename}`)
 
  // save the image to DataBase   
   req.body.image = filename;
