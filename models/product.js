@@ -11,7 +11,6 @@ const productSchema = new mongoose.Schema({
     },
     slug:{
         type: String,
-        required: [true, 'Product slug is required'],
         lowercase: true,
     },
     price:{
@@ -57,7 +56,6 @@ const productSchema = new mongoose.Schema({
     },
     colors:{
         type: [String],
-        required: [true, 'Product colors is required'],
         enum: ['Black', 'Brown', 'Silver', 'White', 'Blue'],
     },
     imageCover:{
@@ -94,6 +92,29 @@ productSchema.pre(/^find/, function(next){
         select: 'name'
     });
     next();
+});
+
+const setImageURL = (doc) => {
+    // return image base url + image name
+    if(doc.imageCover){
+      const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`
+      doc.imageCover = imageUrl;
+    }
+    if(doc.images){
+        const images = [];
+        doc.images.foreach((image) =>{
+            const imageUrl = `${process.env.BASE_URL}/products/${doc.image}`
+            images.push(imageUrl);
+        })
+    }
+};
+// With FindAll, FindOne and Update
+productSchema.post('init',(doc) =>{
+  setImageURL(doc);
+});
+// With Create
+productSchema.post('save', (doc) =>{
+  setImageURL(doc);
 });
 
 const Product = mongoose.model('Product', productSchema);

@@ -16,7 +16,7 @@ const resizeBrandImage = asyncHandler(async (req, res, next) => {
   .resize(600, 600)
   .toFormat('jpeg')
   .jpeg({ quality: 95})
-  .toFile(`uploads/categories/${filename}`)
+  .toFile(`uploads/brands/${filename}`)
 
  // save the image to DataBase   
   req.body.image = filename;

@@ -6,7 +6,9 @@ const {
     getProduct,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    uploadProductImages,
+    resizeProductImages
 } = require('../controllers/productController');
 
 const {
@@ -19,11 +21,21 @@ const {
 
 router.route('/')
 .get(getProducts)
-.post(createProductValidator, createProduct);
+.post(
+    uploadProductImages,
+    resizeProductImages,
+    // createProductValidator,
+    createProduct
+);
 
 router.route('/:id')
 .get(getProductValidator, getProduct)
-.patch(updateProductValidator, updateProduct)
+.patch(
+    uploadProductImages,
+    resizeProductImages,
+    updateProductValidator,
+    updateProduct
+)
 .delete(deleteProductValidator, deleteProduct);
 
 
