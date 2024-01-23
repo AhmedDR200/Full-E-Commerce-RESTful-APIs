@@ -1,8 +1,6 @@
 const multer = require('multer');
 
-
-// Memory Storage for multer
-exports.uploadSingleImage = (fieldname) => {
+const multerOptions = () =>{
     const multerStorage = multer.memoryStorage();
 
     const multerFilter = (req, file, cb) => {
@@ -14,6 +12,11 @@ exports.uploadSingleImage = (fieldname) => {
     };
 
     const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
-
-    return upload.single(fieldname)
+    return upload;
 }
+
+// Memory Storage for multer
+exports.uploadSingleImage = (fieldname) => multerOptions().single(fieldname)
+
+exports.uploadMixOfImages = (arrayOfFields) =>
+ multerOptions().fields(arrayOfFields);

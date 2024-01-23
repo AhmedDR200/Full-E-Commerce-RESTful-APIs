@@ -1,31 +1,21 @@
 const Product = require('../models/product');
 const factory = require('./handelers')
-const multer = require('multer')
+const { uploadMixOfImages } = require('../middlewares/uploadImages')
 const asyncHandler = require('express-async-handler');
 const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');
 
-const multerStorage = multer.memoryStorage();
 
-const multerFilter = (req, file, cb) => {
-    if(file.mimetype.startsWith('image')){
-        cb(null, true)
-    }else{
-        cb(new Error('Not an image! Please upload only images.'), false)
-    }
-};
-
-const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
-
-
-const uploadProductImages = upload.fields([{
-    name:"imageCover",
-    maxCount:1,
-},
-{
-    name:"images",
-    maxCount:5,
-}]);
+const uploadProductImages = uploadMixOfImages([
+  {
+      name:"imageCover",
+      maxCount:1,
+  },
+  {
+      name:"images",
+      maxCount:5,
+  }
+]);
 
 
 const resizeProductImages = asyncHandler(async (req, res, next) => {
