@@ -11,6 +11,7 @@ const catsRoutes = require('./routes/catRoute');
 const SubCatRoutes = require('./routes/subCatRoute');
 const BrandRoutes = require('./routes/brandRoute');
 const ProductRoutes = require('./routes/productRoute');
+const UserRoutes = require('./routes/userRoute');
 
 const ApiError = require('./utils/apiError');
 const globalError = require('./middlewares/errorMiddleware');
@@ -41,6 +42,7 @@ app.use('/cats', catsRoutes);
 app.use('/subCats', SubCatRoutes);
 app.use('/brands',BrandRoutes);
 app.use('/products',ProductRoutes);
+app.use('/users',UserRoutes);
 
 
 // 404 Error Handling Middleware
