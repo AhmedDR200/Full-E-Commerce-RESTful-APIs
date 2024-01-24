@@ -11,26 +11,31 @@ const {
     resizeUserImage
 } = require('../controllers/userController');
 
-
+const {
+    createUserValidator,
+    updateUserValidator,
+    getUserValidator,
+    deleteUserValidator
+} = require('../validators/userValidator')
 
 router.route('/')
 .get(getUsers)
 .post(
     uploadUserImage,
     resizeUserImage,
-    // createUserValidator,
+    createUserValidator,
     createUser
 );
 
 router.route('/:id')
-.get(getUser)
+.get(getUserValidator,getUser)
 .patch(
     uploadUserImage,
     resizeUserImage,
-    // updateUserValidator,
+    updateUserValidator,
     updateUser
 )
-.delete(deleteUser);
+.delete(deleteUserValidator,deleteUser);
 
 
 
