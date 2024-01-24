@@ -38,7 +38,17 @@ const createUserValidator = [
     .notEmpty()
     .withMessage('User Password is Required !')
     .isLength({min:6})
-    .withMessage('User Password must be at least 6 characters !'),
+    .withMessage('User Password must be at least 6 characters !')
+    .custom((password, {req}) => {
+        if(password !== req.body.passwordConfirm){
+            throw new Error('User Password Confirm must be the same as Password !')
+        }
+        return true;
+    }),
+
+    check('passwordConfirm')
+    .notEmpty()
+    .withMessage('User Password Confirm is Required !'),
 
     check('profileImg')
     .optional(),
