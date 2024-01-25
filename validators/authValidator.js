@@ -44,3 +44,21 @@ exports.signUpValidator = [
 
     ,validetorMiddleware
 ]
+
+
+
+exports.logInValidator = [
+    check('email')
+    .notEmpty()
+    .withMessage('User Email is Required !')
+    .isEmail()
+    .withMessage('Invalid Email Provided !'),
+
+    check('password')
+    .notEmpty()
+    .withMessage('User Password is Required !')
+    .isLength({min:6})
+    .withMessage('User Password must be at least 6 characters !')
+
+    ,validetorMiddleware
+];
