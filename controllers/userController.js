@@ -4,6 +4,8 @@ const asyncHandler = require('express-async-handler');
 const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');
 const {uploadSingleImage} = require('../middlewares/uploadImages')
+const ApiError = require('../utils/apiError')
+const bcrypt = require('bcryptjs')
 
 // Image upload
 const uploadUserImage = uploadSingleImage("profileImg");
@@ -48,7 +50,53 @@ const getUser = factory.getOne(User)
 // @desc    Update a user
 // @route   PUT /users/:id
 // @access  Private/Admin
-const updateUser = factory.updateOne(User)
+const updateUser = asyncHandler(
+  async (req, res, next) => {
+      const doc = await User.findByIdAndUpdate(req.params.id,
+      {
+        name: req.body.name,
+        slug: req.body.slug,
+        phone: req.body.phone,
+        email: req.body.email,
+        profileImg: req.body.profileImg,
+        role: req.body.role,
+      },
+      { new: true});
+
+      if(!doc){
+          return next(new ApiError('Not Found', 404));
+      }
+
+      res.status(200).json({
+          status: 'success',
+          data: {doc}
+      });
+});
+
+
+// @desc    Change Password
+// @route   PATCH /users/changePassword/:id
+// @access  Private/Admin
+const changePassword = asyncHandler(
+  async (req, res, next) => {
+      const doc = await User.findByIdAndUpdate(
+        req.params.id,
+      {
+        password: await bcrypt.hash(req.body.password, 12)
+      },
+      {
+        new: true
+      });
+
+      if(!doc){
+          return next(new ApiError('Not Found', 404));
+      }
+
+      res.status(200).json({
+          status: 'success',
+          data: {doc}
+      });
+});
 
 
 // @desc    Delete a user
@@ -64,5 +112,6 @@ module.exports = {
     updateUser,
     deleteUser,
     uploadUserImage,
-    resizeUserImage
+    resizeUserImage,
+    changePassword
 };

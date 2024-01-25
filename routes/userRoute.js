@@ -8,7 +8,8 @@ const {
     updateUser,
     deleteUser,
     uploadUserImage,
-    resizeUserImage
+    resizeUserImage,
+    changePassword
 } = require('../controllers/userController');
 
 const {
@@ -17,6 +18,9 @@ const {
     getUserValidator,
     deleteUserValidator
 } = require('../validators/userValidator')
+
+
+router.patch("/changePassword/:id", changePassword)
 
 router.route('/')
 .get(getUsers)
