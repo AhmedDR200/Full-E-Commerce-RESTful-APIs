@@ -56,3 +56,21 @@ exports.login = asyncHandler(
         })
     }
 )
+
+
+exports.protect = asyncHandler(
+    async(req, res, next) =>{
+        // check if token exist
+        let token;
+        if(
+            req.headers.authorization &&
+            req.headers.authorization.startsWith("Bearer")
+        ){
+            token = req.headers.authorization.split(" ")[1];
+            console.log(token);
+        }
+        if(!token){
+            return next(new ApiError("You are not login, Please login to get access this rpoute", 401))
+        }
+    }
+);
