@@ -94,6 +94,7 @@ const changePassword = asyncHandler(
 
       res.status(200).json({
           status: 'success',
+          message: 'Password Changed Successfully',
           data: {doc}
       });
 });
