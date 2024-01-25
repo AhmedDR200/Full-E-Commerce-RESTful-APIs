@@ -2,6 +2,7 @@ const { check, body } = require('express-validator');
 const validetorMiddleware = require('../middlewares/validetorMiddleware');
 const slugify = require('slugify');
 const User = require('../models/user');
+const bcrypt = require('bcryptjs')
 
 
 const getUserValidator =  [
@@ -83,6 +84,44 @@ const updateUserValidator = [
     ,validetorMiddleware
 ]
 
+const changePasswordValidator = [
+    check('id')
+    .isMongoId()
+    .withMessage('Invalid User ID Provided !'),
+
+    check("currentPassword")
+    .notEmpty()
+    .withMessage("You must set yout current password !"),
+
+    check("passwordConfirm")
+    .notEmpty()
+    .withMessage("You must put the password confirm !"),
+
+    check("password")
+    .notEmpty()
+    .withMessage("You must enter new password !")
+    .custom(async(val, {req}) => {
+        // verify current password
+        const user = await User.findById(req.params.id);
+        if(!user){
+            throw new Error("There is no user for this id")
+        }
+        const isCorrectPassword = bcrypt.compare(
+            req.body.currentPassword,
+            user.password
+        );
+        if(!isCorrectPassword){
+            throw new Error("Incorrect current password !")
+        }
+        // verify password confirm
+        if(val !== req.body.passwordConfirm){
+            throw new Error("Invalid Password Confirmtion !")
+        }
+        return true;
+    })
+    ,validetorMiddleware
+]
+
 
 const deleteUserValidator = [
     check('id')
@@ -96,5 +135,6 @@ module.exports = {
     getUserValidator,
     createUserValidator,
     updateUserValidator,
-    deleteUserValidator
+    deleteUserValidator,
+    changePasswordValidator
 }

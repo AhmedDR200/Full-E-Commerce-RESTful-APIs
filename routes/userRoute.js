@@ -16,11 +16,16 @@ const {
     createUserValidator,
     updateUserValidator,
     getUserValidator,
-    deleteUserValidator
+    deleteUserValidator,
+    changePasswordValidator
 } = require('../validators/userValidator')
 
 
-router.patch("/changePassword/:id", changePassword)
+router.patch(
+ "/changePassword/:id",
+ changePasswordValidator,
+ changePassword
+)
 
 router.route('/')
 .get(getUsers)
