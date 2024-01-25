@@ -72,5 +72,14 @@ exports.protect = asyncHandler(
         if(!token){
             return next(new ApiError("You are not login, Please login to get access this rpoute", 401))
         }
+        // verify token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
+        console.log(decoded);
+        // check id user exist
+        const currentUser = await User.findById(decoded.userId);
+        if(!currentUser){
+            return next(new ApiError("The User that belong to this token does no longer exist", 401))
+        }
+
     }
 );

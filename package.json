@@ -4,8 +4,8 @@
   "description": "NodeJS - Full E-Commerce RESTful APIs",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:dev": "nodemon server.js",
+    "start:prod": "NODE_ENV=production node server.js"
   },
   "keywords": [],
   "author": "",
