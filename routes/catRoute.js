@@ -11,6 +11,8 @@ uploadCategoryImage,
 resizeCategoryImage} 
 = require('../controllers/catController');
 
+const { protect, allowedTo } = require("../controllers/authController");
+
 const 
 {getCategoryValidator,
 createCategoryValidator,
@@ -23,6 +25,8 @@ deleteCategoryValidator}
 router.route('/')
 .get(getCategories)
 .post(
+    protect,
+    allowedTo('admin'),
     uploadCategoryImage,
     resizeCategoryImage,
     createCategoryValidator,
