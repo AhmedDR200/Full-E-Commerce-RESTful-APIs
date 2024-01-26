@@ -166,3 +166,30 @@ exports.forgotPassword = asyncHandler(
         })
     }
 );
+
+
+exports.verifyPasswordCode = asyncHandler(
+    async(req, res, next) => {
+        // get user based on reset code
+        const hashedResetCode = crypto
+        .createHash('sha256')
+        .update(req.body.resetCode)
+        .digest('hex');
+
+        const user = await User.findOne({
+            passwordResetCode: hashedResetCode,
+            passwordResetExpires: {$gt: Date.now()},
+        });
+        if (!user) {
+            return next(new ApiError("Reset Code Invalid or Expired"))
+        }
+        // reset code valid
+        user.passwordResetVerified = true;
+        await user.save();
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Reset Code is Verified'
+        })
+    }
+)
