@@ -71,7 +71,7 @@ exports.protect = asyncHandler(
             console.log(token);
         }
         if(!token){
-            return next(new ApiError("You are not login, Please login to get access this rpoute", 401))
+            return next(new ApiError("You are not login, Please login to get access this route", 401))
         }
         // verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)

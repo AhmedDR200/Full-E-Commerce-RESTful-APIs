@@ -40,11 +40,17 @@ router.use('/:catId/subCats', subCatRoutes);
 router.route('/:id')
 .get(getCategoryValidator,getCategory)
 .patch(
+    protect,
+    allowedTo('admin'),
     uploadCategoryImage,
     resizeCategoryImage,
     updateCategoryValidator,
     updateCategory
 )
-.delete(deleteCategoryValidator, deleteCategory);
+.delete(
+    protect,
+    allowedTo('admin'),
+    deleteCategoryValidator,
+    deleteCategory);
 
 module.exports = router;

@@ -20,6 +20,7 @@ const {
     changePasswordValidator
 } = require('../validators/userValidator')
 
+const { protect, allowedTo } = require("../controllers/authController");
 
 router.patch(
  "/changePassword/:id",
@@ -28,8 +29,10 @@ router.patch(
 )
 
 router.route('/')
-.get(getUsers)
+.get(protect, allowedTo('admin'), getUsers)
 .post(
+    protect,
+    allowedTo('admin'),
     uploadUserImage,
     resizeUserImage,
     createUserValidator,
@@ -37,14 +40,25 @@ router.route('/')
 );
 
 router.route('/:id')
-.get(getUserValidator,getUser)
+.get(
+    protect,
+    allowedTo('admin'),
+    getUserValidator,
+    getUser)
 .patch(
+    protect,
+    allowedTo('admin'),
     uploadUserImage,
     resizeUserImage,
     updateUserValidator,
     updateUser
 )
-.delete(deleteUserValidator,deleteUser);
+.delete(
+    protect,
+    allowedTo('admin'),
+    deleteUserValidator,
+    deleteUser
+);
 
 
 
