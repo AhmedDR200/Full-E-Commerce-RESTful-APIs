@@ -10,7 +10,8 @@ const {
     uploadUserImage,
     resizeUserImage,
     changePassword,
-    getLoggedUserData
+    getLoggedUserData,
+    updateLoggedUserPassword
 } = require('../controllers/userController');
 
 const {
@@ -28,7 +29,12 @@ router.get("/getMe",
  protect,
  getLoggedUserData,
  getUser,
-)
+);
+
+router.patch("/changeMyPassword",
+ protect,
+ updateLoggedUserPassword,
+);
 
 // Admin can access this routes
 router.use(protect, allowedTo('admin'))

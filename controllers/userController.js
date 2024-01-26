@@ -1,11 +1,12 @@
 const User = require('../models/user');
-const factory = require('./handelers')
+const factory = require('./handelers');
 const asyncHandler = require('express-async-handler');
 const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');
-const {uploadSingleImage} = require('../middlewares/uploadImages')
-const ApiError = require('../utils/apiError')
-const bcrypt = require('bcryptjs')
+const {uploadSingleImage} = require('../middlewares/uploadImages');
+const ApiError = require('../utils/apiError');
+const bcrypt = require('bcryptjs');
+const createToken = require('../utils/createToken');
 
 // Image upload
 const uploadUserImage = uploadSingleImage("profileImg");
@@ -117,6 +118,29 @@ const getLoggedUserData = asyncHandler(
   }
 )
 
+// @desc    Update logged user password
+// @route   PATCH /users/updateMyPassword
+// @access  Private/AuthUser
+const updateLoggedUserPassword = asyncHandler(
+  async(req, res, next) => {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        password: await bcrypt.hash(req.body.password, 12),
+        passwordChangedAt: Date.now(),
+      },
+      {new: true}
+    )
+    // generate token
+    const token = createToken(user._id);
+
+    res.status(200).json({
+      status: 'success',
+      data: user,
+      token: token
+    })
+  }
+);
 
 module.exports = {
     getUsers,
@@ -127,5 +151,6 @@ module.exports = {
     uploadUserImage,
     resizeUserImage,
     changePassword,
-    getLoggedUserData
+    getLoggedUserData,
+    updateLoggedUserPassword
 };
