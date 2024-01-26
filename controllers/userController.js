@@ -164,6 +164,20 @@ const updateLoggedUserData = asyncHandler(
   }
 );
 
+// @desc    Deactivate logged user
+// @route   DELETE /users/deactivateMe
+// @access  Private/AuthUser
+const deactivateLoggedUser = asyncHandler(
+  async(req, res, next) => {
+    await User.findByIdAndUpdate(req.user._id, {active: false});
+
+    res.status(204).json({
+      status: 'success',
+      message: 'User Deactivated Successfully'
+    })
+  }
+);
+
 module.exports = {
     getUsers,
     createUser,
@@ -175,5 +189,6 @@ module.exports = {
     changePassword,
     getLoggedUserData,
     updateLoggedUserPassword,
-    updateLoggedUserData
+    updateLoggedUserData,
+    deactivateLoggedUser
 };
