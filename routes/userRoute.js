@@ -11,7 +11,8 @@ const {
     resizeUserImage,
     changePassword,
     getLoggedUserData,
-    updateLoggedUserPassword
+    updateLoggedUserPassword,
+    updateLoggedUserData
 } = require('../controllers/userController');
 
 const {
@@ -19,7 +20,8 @@ const {
     updateUserValidator,
     getUserValidator,
     deleteUserValidator,
-    changePasswordValidator
+    changePasswordValidator,
+    updateLoggedUserValidator
 } = require('../validators/userValidator')
 
 const { protect, allowedTo } = require("../controllers/authController");
@@ -34,6 +36,12 @@ router.get("/getMe",
 router.patch("/changeMyPassword",
  protect,
  updateLoggedUserPassword,
+);
+
+router.patch("/changeMyData",
+ protect,
+ updateLoggedUserValidator,
+ updateLoggedUserData,
 );
 
 // Admin can access this routes

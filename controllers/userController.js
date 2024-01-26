@@ -142,6 +142,28 @@ const updateLoggedUserPassword = asyncHandler(
   }
 );
 
+// @desc    Update logged user data without password and role
+// @route   PATCH /users/updateMyData
+// @access  Private/AuthUser
+const updateLoggedUserData = asyncHandler(
+  async(req, res, next) => {
+    const updateduser = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone,
+      },
+      {new: true}
+    )
+
+    res.status(200).json({
+      status: 'success',
+      data: updateduser,
+    })
+  }
+);
+
 module.exports = {
     getUsers,
     createUser,
@@ -152,5 +174,6 @@ module.exports = {
     resizeUserImage,
     changePassword,
     getLoggedUserData,
-    updateLoggedUserPassword
+    updateLoggedUserPassword,
+    updateLoggedUserData
 };

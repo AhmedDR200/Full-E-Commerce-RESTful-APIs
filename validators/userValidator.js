@@ -84,6 +84,7 @@ const updateUserValidator = [
     ,validetorMiddleware
 ]
 
+
 const changePasswordValidator = [
     check('id')
     .isMongoId()
@@ -131,10 +132,43 @@ const deleteUserValidator = [
 ]
 
 
+const updateLoggedUserValidator = [
+    check('name')
+    .notEmpty()
+    .withMessage('User Name is Required !')
+    .isLength({min:3, max:35})
+    .withMessage('User Name must be between 3 to 35 characters !'),
+    body('name')
+    .optional()
+    .custom((val, {req}) => {
+        req.body.slug = slugify(val);
+        return true;
+    }),
+
+    check("email")
+    // .notEmpty()
+    // .withMessage("Email Required")
+    // .isEmail()
+    // .withMessage("Invalid Email Address")
+    .custom((val) => User.findOne({email: val}).then(user =>{
+        if(user){
+            return Promise.reject('Email Already in Use !')
+        }
+    })),
+
+    check('phone')
+    .optional()
+    .isMobilePhone(['ar-EG', 'ar-SA'])
+    .withMessage('Invalid Phone Number Provided !, only accept Egy and SA phones numbers')
+
+    ,validetorMiddleware
+]
+
 module.exports = {
     getUserValidator,
     createUserValidator,
     updateUserValidator,
     deleteUserValidator,
-    changePasswordValidator
+    changePasswordValidator,
+    updateLoggedUserValidator
 }
