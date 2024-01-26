@@ -108,7 +108,9 @@ exports.allowedTo =(...roles) => asyncHandler(
     }
 )
 
-
+// @desc    Forgot Password
+// @route   POST /auth/forgotPassword
+// @access  Public
 exports.forgotPassword = asyncHandler(
     async(req, res, next) => {
         // get user by email
@@ -167,7 +169,9 @@ exports.forgotPassword = asyncHandler(
     }
 );
 
-
+// @desc    Verify Password Code
+// @route   POST /auth/verifyPasswordCode
+// @access  Public
 exports.verifyPasswordCode = asyncHandler(
     async(req, res, next) => {
         // get user based on reset code
@@ -193,3 +197,37 @@ exports.verifyPasswordCode = asyncHandler(
         })
     }
 )
+
+// @desc    Reset Password
+// @route   POST /auth/resetPassword
+// @access  Public
+exports.resetPassword = asyncHandler(
+    async(req, res, next) => {
+        // get user based on email
+        const user = await User.findOne({email: req.body.email});
+        if(!user){
+            return next(new ApiError(`There is no user with email ${req.body.email}`, 400));
+        }
+        // check if reset code is verifed
+        if(!user.passwordResetVerified){
+            return next(new ApiError(`Reset code not verifed`, 404));
+        }
+
+        user.password = req.body.newPassword;
+
+        user.passwordResetCode = undefined;
+        user.passwordResetExpires = undefined;
+        user.passwordResetVerified = undefined;
+
+        await user.save();
+
+        // generate new token ater all is ok
+        const token = createToken(user._id);
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Password reset Successfully',
+            token: token
+        })
+    }
+);
