@@ -4,13 +4,14 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs')
 
-const createToken = (payload) =>{
-    jwt.sign(
-        {userId: payload},
+const createToken = (payload) => {
+    return jwt.sign(
+        { userId: payload },
         process.env.JWT_SECRET_KEY,
-        {expiresIn: process.env.JWT_EXPIRE_TIME}
-    )
+        { expiresIn: process.env.JWT_EXPIRE_TIME }
+    );
 }
+
 
 // @desc    Signup a User
 // @route   POST /auth/signup
@@ -80,6 +81,15 @@ exports.protect = asyncHandler(
         if(!currentUser){
             return next(new ApiError("The User that belong to this token does no longer exist", 401))
         }
-
+        // check if the user change password after token creation
+        if (currentUser.passwordChangedAt) {
+            const passwordChangedTime = parseInt(currentUser.passwordChangedAt.getTime() /1000,10);
+            // Password changed after token created(Error)
+            if (passwordChangedTime > decoded.iat) {
+                return next(new ApiError("User recntly changed his password, please login again...", 401))
+            }
+        }
+        req.user = currentUser;
+        next();
     }
 );
