@@ -107,6 +107,17 @@ const changePassword = asyncHandler(
 const deleteUser = factory.deleteOne(User)
 
 
+// @desc    Fetch logged user data
+// @route   GET /users/getMe
+// @access  Private/AuthUser
+const getLoggedUserData = asyncHandler(
+  async(req, res, next) => {
+    req.params.id = req.user._id;
+    next();
+  }
+)
+
+
 module.exports = {
     getUsers,
     createUser,
@@ -115,5 +126,6 @@ module.exports = {
     deleteUser,
     uploadUserImage,
     resizeUserImage,
-    changePassword
+    changePassword,
+    getLoggedUserData
 };

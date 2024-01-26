@@ -9,7 +9,8 @@ const {
     deleteUser,
     uploadUserImage,
     resizeUserImage,
-    changePassword
+    changePassword,
+    getLoggedUserData
 } = require('../controllers/userController');
 
 const {
@@ -22,17 +23,25 @@ const {
 
 const { protect, allowedTo } = require("../controllers/authController");
 
-router.patch(
- "/changePassword/:id",
- changePasswordValidator,
- changePassword
+
+router.get("/getMe",
+ protect,
+ getLoggedUserData,
+ getUser,
 )
+
+// Admin can access this routes
+router.use(protect, allowedTo('admin'))
+
+router.patch(
+    "/changePassword/:id",
+    changePasswordValidator,
+    changePassword
+);
 
 router.route('/')
 .get(protect, allowedTo('admin'), getUsers)
 .post(
-    protect,
-    allowedTo('admin'),
     uploadUserImage,
     resizeUserImage,
     createUserValidator,
@@ -41,21 +50,16 @@ router.route('/')
 
 router.route('/:id')
 .get(
-    protect,
-    allowedTo('admin'),
     getUserValidator,
-    getUser)
+    getUser
+)
 .patch(
-    protect,
-    allowedTo('admin'),
     uploadUserImage,
     resizeUserImage,
     updateUserValidator,
     updateUser
 )
 .delete(
-    protect,
-    allowedTo('admin'),
     deleteUserValidator,
     deleteUser
 );
