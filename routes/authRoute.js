@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { signup, login } = require('../controllers/authController');
+const { signup, login, forgotPassword } = require('../controllers/authController');
 const { signUpValidator, logInValidator } = require('../validators/authValidator');
 
 router.route("/signup")
@@ -8,5 +8,8 @@ router.route("/signup")
 
 router.route("/login")
 .post(logInValidator, login)
+
+router.route("/forgotPassword")
+.post(forgotPassword)
 
 module.exports = router;
