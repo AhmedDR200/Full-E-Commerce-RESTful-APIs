@@ -3,8 +3,8 @@ const path = require('path')
 
 // 3rd Party Moudles
 const express = require('express');
-const dotenv = require('dotenv');
 const morgan = require('morgan');
+const dotenv = require('dotenv');
 
 //routes imports
 const catsRoutes = require('./routes/catRoute');
@@ -12,7 +12,8 @@ const SubCatRoutes = require('./routes/subCatRoute');
 const BrandRoutes = require('./routes/brandRoute');
 const ProductRoutes = require('./routes/productRoute');
 const UserRoutes = require('./routes/userRoute');
-const AuthRoutes = require('./routes/authRoute')
+const AuthRoutes = require('./routes/authRoute');
+const ReviewRoutes = require('./routes/reviewRoute')
 
 const ApiError = require('./utils/apiError');
 const globalError = require('./middlewares/errorMiddleware');
@@ -41,10 +42,11 @@ if (process.env.NODE_ENV === 'development') {
 // Routes
 app.use('/cats', catsRoutes);
 app.use('/subCats', SubCatRoutes);
-app.use('/brands',BrandRoutes);
-app.use('/products',ProductRoutes);
-app.use('/users',UserRoutes);
-app.use('/auth',AuthRoutes);
+app.use('/brands', BrandRoutes);
+app.use('/products', ProductRoutes);
+app.use('/users', UserRoutes);
+app.use('/auth', AuthRoutes);
+app.use('/reviews', ReviewRoutes);
 
 
 // 404 Error Handling Middleware
