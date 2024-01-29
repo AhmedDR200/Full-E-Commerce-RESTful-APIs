@@ -125,14 +125,20 @@ exports.forgotPassword = asyncHandler(
         await user.save();
 
         // send email
-        const message =`Hi ${user.name},
+        const message =`
+        Dear ${user.name},
 
-        We've received a request to reset the password for your E-shop Account.
-        Here is your reset code: ${resetCode}
+        We hope this message finds you well. We have received a request to reset the password for your E-shop Account.
         
-        To complete the reset, simply enter this code on the reset page.
+        Your reset code is: ${resetCode}
         
-        Thanks a bunch for helping us maintain the security of your account!
+        To successfully complete the password reset process, kindly enter this code on the designated reset page.
+        
+        Your account security is of utmost importance to us, and we appreciate your prompt attention to this matter.
+        
+        If you did not initiate this password reset, please contact our support team immediately.
+        
+        Thank you for your cooperation in maintaining the security of your account.
         
         Best regards,
         The DEVLANT Team`;

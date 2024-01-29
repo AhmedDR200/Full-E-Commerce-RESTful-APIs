@@ -27,6 +27,18 @@ const reviewSchema = new mongoose.Schema({
     versionKey: false
 });
 
+// Populate user and product with Mongoose middleware
+reviewSchema.pre(/^find/, function(next){
+    this.populate({
+        path: 'user',
+        select: 'name'
+    }).populate({
+        path: 'product',
+        select: 'title'
+    });
+    next();
+});
+
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;

@@ -9,12 +9,12 @@ const {
     deleteReview
 } = require('../controllers/reviewController.js.js');
 
-// const {
-//     getBrandValidator,
-//     createBrandValidator,
-//     updateBrandValidator,
-//     deleteBrandValidator
-// } = require('../validators/brandValidator');
+const {
+    createReviewValidator,
+    updateReviewValidator,
+    deleteReviewValidator,
+    getReviewValidator
+} = require('../validators/reviewValidator.js');
 
 const { protect, allowedTo } = require("../controllers/authController.js");
 
@@ -24,16 +24,16 @@ router.route('/')
 .post(
     protect,
     allowedTo('user'),
-    // createBrandValidator,
+    createReviewValidator,
     createReview
 );
 
 router.route('/:id')
-.get(getReview)
+.get(getReviewValidator, getReview)
 .patch(
     protect,
      allowedTo('user'),
-    // updateBrandValidator,
+    updateReviewValidator,
     updateReview
 )
 .delete(
