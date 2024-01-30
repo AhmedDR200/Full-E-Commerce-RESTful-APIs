@@ -63,7 +63,7 @@ const getProducts = factory.getAll(Product)
 // @desc    Fetch single product
 // @route   GET /products/:id
 // @access  Public
-const getProduct = factory.getOne(Product)
+const getProduct = factory.getOne(Product, 'reviews')
 
 
 // @desc    Create a product

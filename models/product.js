@@ -76,7 +76,16 @@ const productSchema = new mongoose.Schema({
     },
     {
     versionKey: false,
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
+
+// virtual populate
+productSchema.virtual("reviews", {
+    ref: 'Review',
+    foreignField: 'product',
+    localField: '_id'
 });
 
 // Populate category, subcategories and brand with Mongoose middleware
@@ -96,18 +105,20 @@ productSchema.pre(/^find/, function(next){
 
 const setImageURL = (doc) => {
     // return image base url + image name
-    if(doc.imageCover){
-      const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`
-      doc.imageCover = imageUrl;
+    if (doc.imageCover) {
+        const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`;
+        doc.imageCover = imageUrl;
     }
-    if(doc.images){
+    if (doc.images) {
         const images = [];
-        doc.images.foreach((image) =>{
-            const imageUrl = `${process.env.BASE_URL}/products/${doc.image}`
+        doc.images.forEach((image) => {
+            const imageUrl = `${process.env.BASE_URL}/products/${image}`;
             images.push(imageUrl);
-        })
+        });
+        doc.images = images; // Update the doc.images property with the new array of image URLs
     }
 };
+
 // With FindAll, FindOne and Update
 productSchema.post('init',(doc) =>{
   setImageURL(doc);

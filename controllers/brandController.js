@@ -62,4 +62,4 @@ module.exports = {
     deleteBrand,
     uploadBrandImage,
     resizeBrandImage
-}
+};
