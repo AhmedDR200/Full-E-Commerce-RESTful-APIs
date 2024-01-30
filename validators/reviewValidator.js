@@ -21,9 +21,9 @@ const createReviewValidator = [
     .isFloat({min: 1, max: 5})
     .withMessage("Rating must be between 1 and 5 !"),
 
-    check('user')
-    .isMongoId()
-    .withMessage('Invalid User ID Provided !'),
+    // check('user')
+    // .isMongoId()
+    // .withMessage('Invalid User ID Provided !'),
 
     check('product')
     .isMongoId()

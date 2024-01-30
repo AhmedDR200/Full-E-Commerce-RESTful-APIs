@@ -28,9 +28,13 @@ router.route('/')
     allowedTo('admin'),
     uploadProductImages,
     resizeProductImages,
-    // createProductValidator,
+    createProductValidator,
     createProduct
 );
+
+// nested route
+const reviewsRoute = require('./reviewRoute')
+router.use('/:prodId/reviews', reviewsRoute);
 
 router.route('/:id')
 .get(getProductValidator, getProduct)

@@ -33,7 +33,7 @@ router.route('/')
     createCategory
 );
 
-
+// nested route
 const subCatRoutes = require('./subCatRoute');
 router.use('/:catId/subCats', subCatRoutes);
 

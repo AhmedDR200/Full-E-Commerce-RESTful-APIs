@@ -1,12 +1,14 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 const {
     getReview,
     getReviews,
     createReview,
     updateReview,
-    deleteReview
+    deleteReview,
+    createFilterObj,
+    setProdIdToBody
 } = require('../controllers/reviewController.js.js');
 
 const {
@@ -20,10 +22,11 @@ const { protect, allowedTo } = require("../controllers/authController.js");
 
 
 router.route('/')
-.get(getReviews)
+.get(createFilterObj, getReviews)
 .post(
     protect,
     allowedTo('user'),
+    setProdIdToBody,
     createReviewValidator,
     createReview
 );
@@ -39,7 +42,7 @@ router.route('/:id')
 .delete(
     protect,
     allowedTo('admin', 'user'),
-    // deleteBrandValidator,
+    deleteReviewValidator,
     deleteReview
 );
 

@@ -9,10 +9,26 @@ const factory = require('./handelers')
 const getReviews = factory.getAll(Review);
 
 
+// Middleware to set product id to body
+const setProdIdToBody = (req, res, next) => {
+    if (!req.body.product) req.body.product = req.params.prodId;
+    if (!req.body.user) req.body.user = req.params._id;
+    next();
+};
+
 // @desc    create a review
 // @route   POST /reviews
 // @access  Private/Auth user
 const createReview = factory.createOne(Review);
+
+
+// nested route
+const createFilterObj = (req, res, next) => {
+    let filterObject = {};
+    if (req.params.prodId) filterObject = { product: req.params.prodId }
+    req.filterObject = filterObject;
+    next();
+};
 
 
 // @desc    Fetch a review
@@ -38,5 +54,7 @@ module.exports = {
     createReview,
     getReview,
     updateReview,
-    deleteReview
+    deleteReview,
+    createFilterObj,
+    setProdIdToBody
 };
