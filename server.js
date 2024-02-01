@@ -16,6 +16,7 @@ const AuthRoutes = require('./routes/authRoute');
 const ReviewRoutes = require('./routes/reviewRoute');
 const WishlistRoutes = require('./routes/wishlistRoute');
 const AddressesRoutes = require('./routes/addressesRoute');
+const CouponsRoutes = require('./routes/couponRoute');
 
 const ApiError = require('./utils/apiError');
 const globalError = require('./middlewares/errorMiddleware');
@@ -51,6 +52,7 @@ app.use('/auth', AuthRoutes);
 app.use('/reviews', ReviewRoutes);
 app.use('/wishlist', WishlistRoutes);
 app.use('/addresses', AddressesRoutes);
+app.use('/coupons', CouponsRoutes);
 
 
 // 404 Error Handling Middleware
