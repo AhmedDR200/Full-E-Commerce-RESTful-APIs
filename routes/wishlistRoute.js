@@ -2,20 +2,17 @@ const express = require('express');
 const router = express.Router();
 
 const { addToWishlist,
-        removeFromWishlist }
+        removeFromWishlist,
+        getLoggedUserWishlist }
 = require('../controllers/wishlistController');
 const { protect, allowedTo } = require("../controllers/authController");
 
-router.post('/',
- protect,
- allowedTo('user'),
- addToWishlist
-);
+router.use(protect, allowedTo('user'));
 
-router.delete('/:prodId',
- protect,
- allowedTo('user'),
- removeFromWishlist
-);
+router.route('/')
+.post(addToWishlist)
+.get(getLoggedUserWishlist);
+
+router.delete('/:prodId', removeFromWishlist);
 
 module.exports = router;

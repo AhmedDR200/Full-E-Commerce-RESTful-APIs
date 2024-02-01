@@ -45,3 +45,23 @@ exports.removeFromWishlist = asyncHandler(
         });   
     }
 );
+
+
+// @desc    Get logged user wishlist
+// @route   GET /wishlist
+// @access  Private/Auth User
+exports.getLoggedUserWishlist = asyncHandler(
+    async(req, res, next) => {
+        const user = await User.findById(req.user._id)
+        .populate({
+            path: 'wishlist',
+            select: 'title'
+        })
+
+        res.status(200).json({
+            status: 'success',
+            count: user.wishlist.length,
+            data: user.wishlist,
+        });  
+    }
+);
