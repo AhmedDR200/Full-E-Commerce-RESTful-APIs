@@ -11,6 +11,8 @@ exports.deleteOne = (Model) =>
         if (!doc) {
             return next(new ApiError('Not Found', 404));
         }
+        // trigger "remove" event delete doc
+        doc.remove();
 
         res.status(204).json({
             status: 'success',
@@ -27,6 +29,9 @@ exports.updateOne = (Model) =>
             if(!doc){
                 return next(new ApiError('Not Found', 404));
             }
+
+            // trigger "save" event update doc
+            doc.save();
 
             res.status(200).json({
                 status: 'success',
