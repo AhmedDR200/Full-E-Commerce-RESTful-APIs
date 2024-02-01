@@ -4,20 +4,17 @@ const { filterFields, pagination, sorting, fieldLimiting, searching } = require(
 
 
 exports.deleteOne = (Model) =>
-    asyncHandler(async (req, res) => {
-        const { id } = req.params;
-        const doc = await Model.findByIdAndDelete(id);
+  asyncHandler(async (req, res, next) => {
+    const { id } = req.params;
+    const doc = await Model.findByIdAndDelete(id);
 
-        if (!doc) {
-            return next(new ApiError('Not Found', 404));
-        }
-        // trigger "remove" event delete doc
-        doc.remove();
+    if (!doc) {
+      return next(new ApiError(`No document for this id ${id}`, 404));
+    }
 
-        res.status(204).json({
-            status: 'success',
-            data: null
-        });
+    // Trigger "remove" event when update document
+    // doc.remove();
+    res.status(204).send();
 });
 
 
