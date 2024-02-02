@@ -77,3 +77,49 @@ exports.filterOrderForLoggedUser = asyncHandler(
         next();
     }
 );
+
+
+// @desc    Update order paid status to paid
+// @route   PUT /orders/:id/pay
+// @access  Private/Admin
+exports.updateOrderToPaid = asyncHandler(
+    async(req, res, next) => {
+        const order = await Order.findById(req.params.id);
+        if(!order){
+            return next(new ApiError("Threr is no such a order for this user id"));
+        }
+        // update order to paid
+        order.isPaid = true;
+        order.paidAt = Date.now();
+
+        const updatedOrder = await order.save();
+
+        res.status(200).json({
+            status: 'success',
+            data: updatedOrder
+        });
+    }
+);
+
+
+// @desc    Update order delivred status to true
+// @route   PUT /orders/:id/delivr
+// @access  Private/Admin
+exports.updateOrderToDelivred = asyncHandler(
+    async(req, res, next) => {
+        const order = await Order.findById(req.params.id);
+        if(!order){
+            return next(new ApiError("Threr is no such a order for this user id"));
+        }
+        // update order to paid
+        order.isDelivered = true;
+        order.deliveredAt = Date.now();
+
+        const updatedOrder = await order.save();
+
+        res.status(200).json({
+            status: 'success',
+            data: updatedOrder
+        });
+    }
+);

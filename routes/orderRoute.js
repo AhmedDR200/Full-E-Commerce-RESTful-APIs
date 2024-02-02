@@ -5,7 +5,9 @@ const {
     createCashOrder,
     getAllOrders,
     filterOrderForLoggedUser,
-    getOrder
+    getOrder,
+    updateOrderToPaid,
+    updateOrderToDelivred
 } = require('../controllers/orderController');
 
 
@@ -32,6 +34,18 @@ router.get('/:id',
  allowedTo("admin"),
  getOrder
 )
+
+router.put('/:id/pay',
+ protect,
+ allowedTo("admin"),
+ updateOrderToPaid
+);
+
+router.put('/:id/deliver',
+ protect,
+ allowedTo("admin"),
+ updateOrderToDelivred
+);
 
 
 module.exports = router;
