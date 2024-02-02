@@ -7,7 +7,8 @@ const {
     filterOrderForLoggedUser,
     getOrder,
     updateOrderToPaid,
-    updateOrderToDelivred
+    updateOrderToDelivred,
+    checkoutSession
 } = require('../controllers/orderController');
 
 
@@ -47,5 +48,10 @@ router.put('/:id/deliver',
  updateOrderToDelivred
 );
 
+router.get('/checkout-session/:cartId',
+ protect,
+ allowedTo("user"),
+ checkoutSession
+);
 
 module.exports = router;
