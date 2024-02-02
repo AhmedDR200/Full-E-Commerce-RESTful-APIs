@@ -11,6 +11,7 @@ const cartSchema = new mongoose.Schema({
             quantity: {
                 type: Number,
                 required: [true, 'Quantity is required'],
+                default: 1
             },
             color: {
                 type: String,
@@ -24,16 +25,13 @@ const cartSchema = new mongoose.Schema({
     ],
     totalCartPrice: {
         type: Number,
-        required: [true, 'Total cart price is required'],
     },
     totalPriceAfterDiscount: {
         type: Number,
-        required: [true, 'Total price after discount is required'],
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: [true, 'User is required']
     },
 }, {
     versionKey: false,
