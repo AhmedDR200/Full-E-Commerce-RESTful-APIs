@@ -1,5 +1,5 @@
 const Brand = require('../models/brand');
-const factory = require('./handelers')
+const factory = require('./handelers');
 const asyncHandler = require('express-async-handler');
 const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');

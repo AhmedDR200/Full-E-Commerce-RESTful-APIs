@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { strategy } = require('sharp');
 
 const orderSchema = new mongoose.Schema({
     user : {
@@ -54,6 +55,12 @@ const orderSchema = new mongoose.Schema({
     },
     deliveredAt : {
         type: Date
+    },
+    shippingAddress: {
+        details: String,
+        phone: String,
+        city: String,
+        postalCode: Number,
     }
 },{
     versionKey: false,
