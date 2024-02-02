@@ -54,3 +54,26 @@ exports.createCashOrder = asyncHandler(
         });
     }
 );
+
+
+// @desc    Get all orders
+// @route   GET /orders
+// @access  Private/Admin
+exports.getAllOrders = factory.getAll(Order);
+
+
+// @desc    Get a order
+// @route   GET /orders/:id
+// @access  Private/Admin
+exports.getOrder = factory.getOne(Order);
+
+
+// @desc    Get all orders for logged user
+// @route   GET /orders
+// @access  Private/Auth User
+exports.filterOrderForLoggedUser = asyncHandler(
+    async(req, res, next) => {
+        if(req.user.role === 'user') req.filterObj = { user: req.user._id };
+        next();
+    }
+);

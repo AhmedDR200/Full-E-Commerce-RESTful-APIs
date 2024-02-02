@@ -2,17 +2,36 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    createCashOrder
+    createCashOrder,
+    getAllOrders,
+    filterOrderForLoggedUser,
+    getOrder
 } = require('../controllers/orderController');
 
 
 const { protect, allowedTo } = require("../controllers/authController");
 
-router.use(protect, allowedTo('user'))
 
 router.route('/:cartId')
-.post(createCashOrder)
+.post(
+    protect,
+    allowedTo("user"),
+    createCashOrder
+)
 
+router.route('/')
+.get(
+    protect,
+    allowedTo("admin", "user"),
+    filterOrderForLoggedUser,
+    getAllOrders
+)
+
+router.get('/:id',
+ protect,
+ allowedTo("admin"),
+ getOrder
+)
 
 
 module.exports = router;

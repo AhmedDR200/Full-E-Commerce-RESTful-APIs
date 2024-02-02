@@ -5,7 +5,7 @@ const factory = require('./handelers')
 // @desc    Fetch all coupons
 // @route   GET /coupons
 // @access  Private/Admin
-const getAllCoupons = factory.getAll(Coupon)
+const getAllCoupons = factory.getAll(Coupon, 'Coupon')
 
 
 // @desc    create a coupon

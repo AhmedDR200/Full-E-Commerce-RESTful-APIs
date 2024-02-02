@@ -1,49 +1,83 @@
+class ApiFeatures {
+  constructor(mongooseQuery, queryString) {
+    this.mongooseQuery = mongooseQuery;
+    this.queryString = queryString;
+  }
 
+  filter() {
+    const queryStringObj = { ...this.queryString };
+    const excludesFields = ['page', 'sort', 'limit', 'fields'];
+    excludesFields.forEach((field) => delete queryStringObj[field]);
+    // Apply filtration using [gte, gt, lte, lt]
+    let queryStr = JSON.stringify(queryStringObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-exports.filterFields = (req) => {
-  const queryObj = { ...req.query };
-  const excludedFields = ['page', 'sort', 'limit', 'fields'];
-  excludedFields.forEach(el => delete queryObj[el]);
-  return queryObj;
+    this.mongooseQuery = this.mongooseQuery.find(JSON.parse(queryStr));
+
+    return this;
+  }
+
+  sort() {
+    if (this.queryString.sort) {
+      const sortBy = this.queryString.sort.split(',').join(' ');
+      this.mongooseQuery = this.mongooseQuery.sort(sortBy);
+    } else {
+      this.mongooseQuery = this.mongooseQuery.sort('-createAt');
+    }
+    return this;
+  }
+
+  limitFields() {
+    if (this.queryString.fields) {
+      const fields = this.queryString.fields.split(',').join(' ');
+      this.mongooseQuery = this.mongooseQuery.select(fields);
+    } else {
+      this.mongooseQuery = this.mongooseQuery.select('-__v');
+    }
+    return this;
+  }
+
+  search(modelName) {
+    if (this.queryString.keyword) {
+      let query = {};
+      if (modelName === 'Products') {
+        query.$or = [
+          { title: { $regex: this.queryString.keyword, $options: 'i' } },
+          { description: { $regex: this.queryString.keyword, $options: 'i' } },
+        ];
+      } else  {
+        query = { name: { $regex: this.queryString.keyword, $options: 'i' } };
+      }
+
+      this.mongooseQuery = this.mongooseQuery.find(query);
+    }
+    return this;
+  }
+
+  paginate(countDocuments) {
+    const page = this.queryString.page * 1 || 1;
+    const limit = this.queryString.limit * 1 || 50;
+    const skip = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    // Pagination result
+    const pagination = {};
+    pagination.currentPage = page;
+    pagination.limit = limit;
+    pagination.numberOfPages = Math.ceil(countDocuments / limit);
+
+    // next page
+    if (endIndex < countDocuments) {
+      pagination.next = page + 1;
+    }
+    if (skip > 0) {
+      pagination.prev = page - 1;
+    }
+    this.mongooseQuery = this.mongooseQuery.skip(skip).limit(limit);
+
+    this.paginationResult = pagination;
+    return this;
+  }
 }
 
-exports.pagination = (req) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 50;
-  const skip = (page - 1) * limit;
-  return { page, limit, skip };
-}
-
-exports.sorting = (req) => {
-  let sortQuery;
-  if(req.query.sort){
-      sortQuery = req.query.sort.split(',').join(' ');
-  }
-  else {
-      sortQuery = '-createdAt';
-  }
-  return sortQuery;
-}
-
-exports.fieldLimiting = (req) => {
-  let fieldsQuery;
-  if(req.query.fields){
-      fieldsQuery = req.query.fields.split(',').join(' ');
-  }
-  else {
-      fieldsQuery = '-__v';
-  }
-  return fieldsQuery;
-}
-
-exports.searching = (req) => {
-  let searchQuery;
-  if(req.query.keyword){
-      searchQuery = {};
-      searchQuery.$or = [
-          {title: { $regex: req.query.keyword, $options: 'i'}},
-          {description: { $regex: req.query.keyword, $options: 'i'}}
-      ];
-  }
-  return searchQuery;
-}
+module.exports = ApiFeatures;

@@ -7,7 +7,7 @@ const factory = require('./handelers')
 // @desc    Fetch all subCategories
 // @route   GET /subCats
 // @access  Public
-const getSubCategories = factory.getAll(SubCategory)
+const getSubCategories = factory.getAll(SubCategory, 'SubCategory')
 
 
 // Middleware to set category id to body

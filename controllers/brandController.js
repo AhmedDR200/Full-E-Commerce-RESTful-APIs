@@ -28,7 +28,7 @@ const resizeBrandImage = asyncHandler(async (req, res, next) => {
 // @desc    Fetch all brands
 // @route   GET /brands
 // @access  Public
-const getBrands = factory.getAll(Brand)
+const getBrands = factory.getAll(Brand, 'Brand')
 
 
 // @desc    create a brand

@@ -33,7 +33,7 @@ const resizeUserImage = asyncHandler(async (req, res, next) => {
 // @desc    Fetch all users
 // @route   GET /users
 // @access  Private/Admin
-const getUsers = factory.getAll(User)
+const getUsers = factory.getAll(User, 'User')
 
 
 // @desc    create a user

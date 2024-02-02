@@ -6,7 +6,7 @@ const factory = require('./handelers')
 // @desc    Fetch all reviews
 // @route   GET /reviews
 // @access  Public
-const getReviews = factory.getAll(Review);
+const getReviews = factory.getAll(Review, 'Review');
 
 
 // Middleware to set product id to body

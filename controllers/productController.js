@@ -57,7 +57,7 @@ const resizeProductImages = asyncHandler(async (req, res, next) => {
 // @desc    Fetch all products
 // @route   GET /products
 // @access  Public
-const getProducts = factory.getAll(Product)
+const getProducts = factory.getAll(Product, 'Product')
 
 
 // @desc    Fetch single product

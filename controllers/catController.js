@@ -59,7 +59,7 @@ const resizeCategoryImage = asyncHandler(async (req, res, next) => {
 // @desc    Fetch all categories
 // @route   GET /cats
 // @access  Public
-const getCategories = factory.getAll(Category)
+const getCategories = factory.getAll(Category, 'Category')
 
 
 // @desc    create a category

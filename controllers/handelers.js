@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
-const { filterFields, pagination, sorting, fieldLimiting, searching } = require('../utils/apiFeatures');
+const ApiFeatures = require('../utils/apiFeatures');
 
 
 exports.deleteOne = (Model) =>
@@ -71,42 +71,28 @@ exports.getOne = (Model, populationOption) =>
 });
 
 
-exports.getAll = (Model) => 
+exports.getAll = (Model, modelName = '') => 
     asyncHandler(async (req, res) => {
-        // Filtering
-        const queryObj = filterFields(req);
-        let queryStr = JSON.stringify(queryObj);
-        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
-
-        // Pagination
-        const { page, limit, skip } = pagination(req);
-
-        // Building query
-        let mongooseQuery = Model.find(JSON.parse(queryStr))
-            .skip(skip)
-            .limit(limit);
-
-        // Sorting
-        const sortQuery = sorting(req);
-        mongooseQuery = mongooseQuery.sort(sortQuery);
-
-        // Field limiting
-        const fieldsQuery = fieldLimiting(req);
-        mongooseQuery = mongooseQuery.select(fieldsQuery);
-
-        // Searching
-        const searchQuery = searching(req);
-        if(searchQuery){
-            mongooseQuery = mongooseQuery.find(searchQuery);
+        let filter = {};
+        if (req.filterObj) {
+        filter = req.filterObj;
         }
+        // Build query
+        const documentsCounts = await Model.countDocuments();
+        const apiFeatures = new ApiFeatures(Model.find(filter), req.query)
+        .paginate(documentsCounts)
+        .filter()
+        .search(modelName)
+        .limitFields()
+        .sort();
 
-        // Executing query
-        const docs = await mongooseQuery;
+        // Execute query
+        const { mongooseQuery, paginationResult } = apiFeatures;
+        const documents = await mongooseQuery;
 
-        res.json({
-            status: 'success',
-            results: docs.length,
-            page,
-            data: { docs }
+        res.status(200).json({
+            results: documents.length,
+            paginationResult,
+            data: documents 
         });
 });
