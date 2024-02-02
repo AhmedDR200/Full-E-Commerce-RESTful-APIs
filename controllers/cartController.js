@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/apiError');
 const Cart = require('../models/cart');
 const Product = require('../models/product');
+const Coupon = require('../models/coupon');
 
 
 // calculate total cart price
@@ -11,6 +12,7 @@ const calcTotalCartPrice = (cart) =>{
         totalPrice += item.quantity * item.price
     });
     cart.totalCartPrice = totalPrice;
+    cart.totalPriceAfterDiscount = undefined;
     return totalPrice;
 };
 
@@ -147,6 +149,7 @@ exports.updateCartItemQuantity = asyncHandler(
         }
 
         calcTotalCartPrice(cart);
+        await cart.save();
 
         res.status(200).json({
             status: 'success',
@@ -154,4 +157,48 @@ exports.updateCartItemQuantity = asyncHandler(
             data: cart
         });
     }
-)
+);
+
+
+// @desc      Apply coupon on cart
+// @route     PATCH /cart/applyCoupon
+// @access    Private/Auth User
+exports.applyCoupon = asyncHandler(
+    async(req, res, next) => {
+        try {
+            // Get coupon based on coupon name
+            const coupon = await Coupon.findOne({
+                name: req.body.coupon,
+                expiry: { $gt: Date.now() }
+            });
+
+            if (!coupon) {
+                return next(new ApiError("Coupon is invalid or expired", 404));
+            }
+
+            // Get the user's cart
+            const cart = await Cart.findOne({ user: req.user._id });
+
+            if (!cart) {
+                return next(new ApiError("User's cart not found", 404));
+            }
+
+            const totalPrice = cart.totalCartPrice;
+
+            // Calculate price after discount
+            const totalPriceAfterDiscount = (totalPrice - (totalPrice * coupon.discount) / 100).toFixed(2);
+
+            cart.totalPriceAfterDiscount = totalPriceAfterDiscount;
+            await cart.save();
+
+            res.status(200).json({
+                status: 'success',
+                results: cart.cartItems.length,
+                data: cart
+            });
+        } catch (error) {
+            // Handle unexpected errors
+            return next(new ApiError("Internal Server Error", 500));
+        }
+    }
+);
