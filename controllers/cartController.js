@@ -55,6 +55,28 @@ exports.addItemToCart = asyncHandler(
             status: 'success',
             message: 'Product added to cart successfully',
             data: cart
+        });
+    }
+);
+
+
+// @desc      Get user cart
+// @route     GET /cart
+// @access    Private/Auth User
+exports.getUserCart = asyncHandler(
+    async(req, res, next) => {
+        const cart = await Cart.findOne({
+            user: req.user._id
         })
+
+        if(!cart){
+            return next(new ApiError(`There is no cart for this user id ${req.user._id} !`, 404))
+        }
+
+        res.status(200).json({
+            status: 'success',
+            results: cart.cartItems.length,
+            data: cart
+        });
     }
 );
