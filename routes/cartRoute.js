@@ -3,7 +3,8 @@ const router = express.Router();
 
 const {
     addItemToCart,
-    getUserCart
+    getUserCart,
+    deleteCartItem
 } = require('../controllers/cartController');
 
 
@@ -15,10 +16,9 @@ router.route('/')
 .get(getUserCart)
 .post(addItemToCart);
 
-// router.route('/:id')
-// .get(getCoupon)
-// .patch(updateCoupon)
-// .delete(deleteCoupon);
+router.route('/:itemId')
+.delete(deleteCartItem)
+
 
 
 
