@@ -4,7 +4,8 @@ const router = express.Router();
 const {
     addItemToCart,
     getUserCart,
-    deleteCartItem
+    deleteCartItem,
+    clearCart
 } = require('../controllers/cartController');
 
 
@@ -14,12 +15,11 @@ router.use(protect, allowedTo('user'))
 
 router.route('/')
 .get(getUserCart)
-.post(addItemToCart);
+.post(addItemToCart)
+.delete(clearCart);
 
 router.route('/:itemId')
 .delete(deleteCartItem)
-
-
 
 
 module.exports = router;

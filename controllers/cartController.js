@@ -83,7 +83,7 @@ exports.getUserCart = asyncHandler(
 
 
 // @desc      Delete item from cart
-// @route     GET /cart/:itemId
+// @route     DELETE /cart/:itemId
 // @access    Private/Auth User
 exports.deleteCartItem = asyncHandler(
     async(req, res, next) => {
@@ -104,4 +104,18 @@ exports.deleteCartItem = asyncHandler(
             data: cart
         });
     }
-)
+);
+
+
+// @desc      Delete all item from cart
+// @route     DELETE /cart
+// @access    Private/Auth User
+exports.clearCart = asyncHandler(
+    async(req, res, next) => {
+        await Cart.findOneAndDelete({
+            user: req.user._id
+        });
+
+        res.status(204).send();
+    }
+);
