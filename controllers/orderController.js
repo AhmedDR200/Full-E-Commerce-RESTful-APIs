@@ -3,6 +3,7 @@ const ApiError = require('../utils/apiError');
 const factory = require('./handelers');
 const Order = require('../models/order');
 const Cart = require('../models/cart');
+const Product = require('../models/product');
 
 
 // @desc    Create cash order
@@ -32,6 +33,24 @@ exports.createCashOrder = asyncHandler(
             totalOrderPrice
         });
         // after creating order decrement quantity, increment sold
-        // clear cart depend on cartId
+        if(order){
+            const bulkOption = cart.cartItems.map(item => ({
+                updateOne: {
+                    filter: {_id: item.product},
+                    update: {$inc: {
+                        quantity: -item.quantity,
+                        sold: +item.quantity
+                    }}
+                }
+            }))
+            await Product.bulkWrite(bulkOption, {})
+         // clear cart depend on cartId
+            await Cart.findByIdAndDelete(req.params.cartId)
+        };
+
+        res.status(201).json({
+            status: 'success',
+            data: order
+        });
     }
-)
+);
