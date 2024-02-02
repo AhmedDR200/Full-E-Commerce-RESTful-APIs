@@ -9,6 +9,7 @@ const WishlistRoutes = require('./wishlistRoute');
 const AddressesRoutes = require('./addressesRoute');
 const CouponsRoutes = require('./couponRoute');
 const CartRoutes = require('./cartRoute');
+const OrderRoutes = require('./orderRoute');
 
 
 const mountRoutes = (app) => {
@@ -23,6 +24,7 @@ const mountRoutes = (app) => {
     app.use('/addresses', AddressesRoutes);
     app.use('/coupons', CouponsRoutes);
     app.use('/cart', CartRoutes);
+    app.use('/orders', OrderRoutes);
 };
 
 
