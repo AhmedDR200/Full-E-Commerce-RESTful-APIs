@@ -11,7 +11,7 @@ Make sure you have Node.js installed on your machine. You can download it from [
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/AhmedDR200/Full-E-Commerce-RESTful-APIs.git
    ```
 
 2. Navigate to the project directory:
@@ -55,6 +55,125 @@ http://localhost:your-port/
 ```
 
 Replace `your-port` with the port number specified in your configuration.
+
+## API Routes
+
+The following routes are available for interacting with the API:
+
+- **Categories:**
+  - `/cats` - [GET, POST, PUT, DELETE]
+
+- **Subcategories:**
+  - `/subCats` - [GET, POST, PUT, DELETE]
+
+- **Brands:**
+  - `/brands` - [GET, POST, PUT, DELETE]
+
+- **Products:**
+  - `/products` - [GET, POST, PUT, DELETE]
+
+- **Users:**
+  - `/users` - [GET, POST, PUT, DELETE]
+
+- **Authentication:**
+  - `/auth` - [POST]
+
+- **Reviews:**
+  - `/reviews` - [GET, POST, PUT, DELETE]
+
+- **Wishlist:**
+  - `/wishlist` - [GET, POST, DELETE]
+
+- **Addresses:**
+  - `/addresses` - [GET, POST, PUT, DELETE]
+
+- **Coupons:**
+  - `/coupons` - [GET, POST, PUT, DELETE]
+
+- **Cart:**
+  - `/cart` - [GET, POST, PUT, DELETE]
+
+- **Orders:**
+  - `/orders` - [GET, POST, PUT, DELETE]
+
+### Mounting Routes
+
+The routes are mounted using the `mountRoutes` function in `server.js`.
+
+# Models
+
+## Brand Model
+
+- **Properties:**
+  - `name` (String, required): The name of the brand.
+  - `description` (String): A brief description of the brand.
+  - `logoUrl` (String): URL to the brand's logo.
+  - and others ...
+
+## Category Model
+
+- **Properties:**
+  - `name` (String, required): The name of the category.
+  - `description` (String): A brief description of the category.
+  - and others ...
+
+## Cart Model
+
+- **Properties:**
+  - `userId` (String, required): The ID of the user associated with the cart.
+  - `items` (Array): An array of objects representing items in the cart.
+  - and others ...
+
+## Coupon Model
+
+- **Properties:**
+  - `code` (String, required): The coupon code.
+  - `discountPercentage` (Number, required): The percentage discount offered by the coupon.
+  - and others ...
+
+## Order Model
+
+- **Properties:**
+  - `userId` (String, required): The ID of the user placing the order.
+  - `items` (Array, required): An array of objects representing items in the order.
+  - `totalAmount` (Number, required): The total amount for the order.
+  - and others ...
+
+## Product Model
+
+- **Properties:**
+  - `name` (String, required): The name of the product.
+  - `description` (String): A brief description of the product.
+  - `price` (Number, required): The price of the product.
+  - `brandId` (String, required): The ID of the brand associated with the product.
+  - `categoryId` (String, required): The ID of the category associated with the product.
+  - and others ...
+
+## Review Model
+
+- **Properties:**
+  - `productId` (String, required): The ID of the product being reviewed.
+  - `userId` (String, required): The ID of the user who submitted the review.
+  - `rating` (Number, required): The rating given by the user.
+  - `comment` (String): Additional comments provided by the user.
+  - and others ...
+
+## Subcategory Model
+
+- **Properties:**
+  - `name` (String, required): The name of the subcategory.
+  - `categoryId` (String, required): The ID of the category to which the subcategory belongs.
+  - and others ...
+
+## User Model
+
+- **Properties:**
+  - `username` (String, required): The username of the user.
+  - `email` (String, required): The email address of the user.
+  - `password` (String, required): The hashed password of the user.
+  - `role` (String): The role of the user (e.g., "customer" or "admin").
+  - and others ...
+
 
 ### API Documentation
 
