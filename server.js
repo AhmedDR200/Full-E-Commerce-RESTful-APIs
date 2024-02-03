@@ -40,7 +40,7 @@ const dbConnection = require('./config/db');
 dbConnection();
 
 // Body Parser Middleware
-app.use(express.json());
+app.use(express.json({limit: '20kb'}));
 
 // Swagger API documentation
 const swaggerOptions = {
