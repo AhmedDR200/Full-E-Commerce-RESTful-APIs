@@ -200,6 +200,126 @@ The routes are mounted using the `mountRoutes` function in `server.js`.
   - `role` (String): The role of the user (e.g., "customer" or "admin").
   - and others ...
 
+# Validation Layers
+
+To enhance data integrity and security, DEVLANT Full E-Commerce RESTful APIs incorporates validation layers for each model. These layers ensure that incoming data adheres to predefined criteria, preventing malformed or unauthorized information from entering the system.
+
+## Brand Model Validation
+
+Validates brand information to meet specified criteria.
+
+## Category Model Validation
+
+Ensures that category details align with predefined standards.
+
+## Cart Model Validation
+
+Validates shopping cart data for correctness and security.
+
+## Coupon Model Validation
+
+Defines constraints for coupon-related information.
+
+## Order Model Validation
+
+Ensures proper validation of order details.
+
+## Product Model Validation
+
+Validates product data to maintain consistency.
+
+## Review Model Validation
+
+Enforces rules for review-related information.
+
+## Subcategory Model Validation
+
+Validates subcategory data for accuracy and security.
+
+## User Model Validation
+
+Ensures the integrity and security of user-related information.
+
+These validation layers contribute to a more secure and reliable data processing system within DEVLANT Full E-Commerce RESTful APIs.
+
+# Stripe Integration
+
+DEVLANT Full E-Commerce RESTful APIs integrates seamlessly with Stripe to enable secure online payments. This integration simplifies the payment process, ensuring a secure and efficient transaction experience for users.
+
+## Key Points
+
+- **Account Setup:** Create a Stripe account to obtain API keys.
+
+- **API Integration:** Incorporate the Stripe Node.js package and configure API keys for server-side logic.
+
+- **Server-Side Charge Creation:** When a user initiates a payment, the server utilizes the Stripe secret key to create a charge.
+
+- **Webhooks:** Implement webhooks to handle payment-related events, ensuring proper event handling.
+
+- **Testing:** Utilize Stripe's test environment during development for validation without real transactions.
+
+- **Security Considerations:** Stripe.js securely handles sensitive card information on the client side, and HTTPS is enforced for secure data transmission.
+
+By integrating Stripe on the server side, DEVLANT Full E-Commerce RESTful APIs provides a secure and streamlined solution for online payments, enhancing the user shopping experience.
+
+# Authentication System
+
+DEVLANT Full E-Commerce RESTful APIs feature a robust authentication system designed to handle user registration, login, and password management securely. The system is structured around key components:
+
+## Routes
+
+### User Registration (/signup)
+
+- **HTTP Method:** POST
+- **Functionality:** Handles user registration.
+- **Controller Function:** Invokes the `signup` function in the auth controller.
+
+### User Login (/login)
+
+- **HTTP Method:** POST
+- **Functionality:** Manages user login.
+- **Controller Function:** Invokes the `login` function in the auth controller.
+
+### Forgot Password (/forgotPassword)
+
+- **HTTP Method:** POST
+- **Functionality:** Initiates the password reset process.
+- **Controller Function:** Invokes the `forgotPassword` function in the auth controller.
+
+### Verify Reset Code (/verifyResetCode)
+
+- **HTTP Method:** POST
+- **Functionality:** Verifies the reset code during password recovery.
+- **Controller Function:** Invokes the `verifyPasswordCode` function in the auth controller.
+
+### Reset Password (/resetPassword)
+
+- **HTTP Method:** PUT
+- **Functionality:** Updates the user's password after successful code verification.
+- **Controller Function:** Invokes the `resetPassword` function in the auth controller.
+
+## Controller Functions
+
+The authentication system relies on specific controller functions for each route to execute the necessary business logic. These functions handle user registration, login, and password management.
+
+## HTTP Methods
+
+Routes adhere to RESTful conventions, utilizing different HTTP methods (POST and PUT) based on the actions they perform.
+
+This concise overview outlines the core functionality of the authentication system within DEVLANT Full E-Commerce RESTful APIs, focusing on routes, controller functions, and HTTP methods.
+
+# Image Processing with Sharp
+
+In DEVLANT Full E-Commerce RESTful APIs, we leverage the powerful `sharp` module for efficient and flexible image processing. This section provides a brief overview of how image processing is implemented using the `sharp` package.
+
+## Installation
+
+To integrate `sharp` into your project, ensure you have it installed by running:
+
+```bash
+npm install sharp
+
+
 
 ### API Documentation
 
