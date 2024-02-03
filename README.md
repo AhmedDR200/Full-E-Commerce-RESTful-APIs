@@ -27,15 +27,55 @@ Make sure you have Node.js installed on your machine. You can download it from [
    npm install
    ```
 
-# Usage
+## Usage
 
-## Running the API
+### Running the API
 
 To start the development server, run the following command:
 
 ```bash
 npm run start:dev
+```
 
+This will launch the server in development mode using `nodemon`, which automatically restarts the server when changes are detected.
+
+For production deployment, you can use:
+
+```bash
+npm start
+```
+
+Ensure that you have set the `NODE_ENV` environment variable to "production" in your production environment.
+
+### Accessing the API
+
+Once the server is running, you can access the API at the following base URL:
+
+```
+http://localhost:your-port/
+```
+
+Replace `your-port` with the port number specified in your configuration.
+
+### API Documentation
+
+The API documentation is available using Swagger UI. Open the following URL in your browser:
+
+```
+http://localhost:your-port/api-docs
+```
+
+This will display an interactive documentation page where you can explore and test the API endpoints.
+
+### Testing Endpoints
+
+You can use tools like `curl`, Postman, or any API testing tool to interact with the API endpoints. Here's an example using `curl`:
+
+```bash
+curl -X GET http://localhost:your-port/api/your-endpoint
+```
+
+Replace `your-endpoint` with the specific endpoint you want to test.
 
 ## Scripts
 
@@ -84,3 +124,5 @@ This project is designed to run on Node.js version 20.11.0.
 
 This project is licensed under the [ISC License](LICENSE).
 ```
+
+Feel free to customize this template further based on your specific needs!
