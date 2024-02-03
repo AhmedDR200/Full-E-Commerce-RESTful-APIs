@@ -12,6 +12,7 @@ const dotenv = require('dotenv');
 
 // Main Route
 const mountRoutes = require('./routes/mainRoute');
+const { webhookCheckout } = require('./controllers/orderController');
 
 // Utils
 const ApiError = require('./utils/apiError');
@@ -27,6 +28,12 @@ app.options('*', cors());
 
 // Compression Middleware
 app.use(compression());
+
+// Checkout webhook
+app.post('/webhook-checkout',
+ express.raw({ type: 'application/json' }),
+  webhookCheckout
+);
 
 // Database connection
 const dbConnection = require('./config/db');
