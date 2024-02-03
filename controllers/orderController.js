@@ -175,3 +175,5 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
     // 4) send session to response
     res.status(200).json({ status: 'success', session });
 });
+
+

@@ -4,16 +4,27 @@ const path = require('path')
 // 3rd Party Moudles
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
+const compression = require('compression');
 const dotenv = require('dotenv');
 
 // Main Route
 const mountRoutes = require('./routes/mainRoute');
 
+// Utils
 const ApiError = require('./utils/apiError');
 const globalError = require('./middlewares/errorMiddleware');
 dotenv.config();
 
+// Express app
 const app = express();
+
+// Cors Middleware
+app.use(cors());
+app.options('*', cors());
+
+// Compression Middleware
+app.use(compression());
 
 // Database connection
 const dbConnection = require('./config/db');
@@ -25,7 +36,7 @@ app.use(express.json());
 // Static Files Middleware
 app.use(express.static(path.join(__dirname, 'uploads')))
 
-// Morgan Middleware
+// Morgan Middleware => Logging
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
@@ -44,7 +55,7 @@ app.all('*', (req, res, next) => {
 // Global Error Handling Middleware
 app.use(globalError);
 
-// Connection
+// Server Connection
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`server (${process.env.NODE_ENV}) listening at http://localhost:${port}`)
