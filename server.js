@@ -6,9 +6,10 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const compression = require('compression');
+const hpp = require('hpp');
+const rateLimit = require('express-rate-limit');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 
 // Main Route
@@ -43,6 +44,18 @@ dbConnection();
 // Body Parser Middleware
 // limit the body size to 20kb
 app.use(express.json({limit: '20kb'}));
+
+// Prevent HTTP Parameter Pollution Middleware
+app.use(hpp({
+    // Add the fields that you want to allow duplicate values
+    whitelist: [
+        "price",
+        "ratingsQuantity",
+        "ratingsAverage",
+        "sold",
+        "quantity",
+    ]
+}));
 
 // Swagger API documentation
 const swaggerOptions = {
