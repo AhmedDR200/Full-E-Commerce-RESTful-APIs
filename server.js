@@ -8,6 +8,7 @@ const cors = require('cors');
 const compression = require('compression');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 
 // Main Route
@@ -40,6 +41,7 @@ const dbConnection = require('./config/db');
 dbConnection();
 
 // Body Parser Middleware
+// limit the body size to 20kb
 app.use(express.json({limit: '20kb'}));
 
 // Swagger API documentation
@@ -82,6 +84,14 @@ app.use(express.static(path.join(__dirname, 'uploads')))
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+// Rate Limiting Middleware
+const limiter = rateLimit({
+    max: 100,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    message: 'Too many requests from this IP, please try again in an hour!',
+});
+app.use('/', limiter);
 
 // Routes
 mountRoutes(app);
