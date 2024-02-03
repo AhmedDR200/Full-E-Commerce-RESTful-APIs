@@ -8,12 +8,15 @@ const cors = require('cors');
 const compression = require('compression');
 const hpp = require('hpp');
 const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const dotenv = require('dotenv');
 
 // Main Route
 const mountRoutes = require('./routes/mainRoute');
+
+// Webhook Controller
 const { webhookCheckout } = require('./controllers/orderController');
 
 // Utils
@@ -41,8 +44,7 @@ app.post('/webhook-checkout',
 const dbConnection = require('./config/db');
 dbConnection();
 
-// Body Parser Middleware
-// limit the body size to 20kb
+// Body Parser Middleware => limit the body size to 20kb
 app.use(express.json({limit: '20kb'}));
 
 // Prevent HTTP Parameter Pollution Middleware
@@ -97,6 +99,9 @@ app.use(express.static(path.join(__dirname, 'uploads')))
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+// Data Sanitization against NoSQL Query Injection Middleware
+app.use(mongoSanitize());
 
 // Rate Limiting Middleware
 const limiter = rateLimit({
