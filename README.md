@@ -1,4 +1,3 @@
-```markdown
 # DEVLANT Full E-Commerce RESTful APIs
 
 ## Description
@@ -123,6 +122,6 @@ This project is designed to run on Node.js version 20.11.0.
 ## License
 
 This project is licensed under the [ISC License](LICENSE).
-```
+
 
 Feel free to customize this template further based on your specific needs!
