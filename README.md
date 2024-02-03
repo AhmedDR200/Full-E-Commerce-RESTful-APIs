@@ -1,8 +1,34 @@
 # DEVLANT Full E-Commerce RESTful APIs
 
+![Project Logo/Photo](./logo.png)
+
 ## Description
 
-NodeJS - Full E-Commerce RESTful APIs
+DEVLANT Full E-Commerce RESTful APIs is a robust Node.js-based solution designed to empower developers in building comprehensive and scalable e-commerce applications. This API suite encompasses essential functionalities for managing product information, user accounts, orders, and more, providing a solid foundation for creating a feature-rich online shopping experience.
+
+## Key Features
+
+- **Brand Management:** Efficiently organize and manage product brands with detailed information and logos.
+
+- **Category and Subcategory:** Categorize products seamlessly with support for subcategories, offering a structured browsing experience.
+
+- **Product Listings:** Easily handle products with details such as name, description, price, and association with brands and categories.
+
+- **User Authentication:** Secure user registration and authentication with hashed passwords for enhanced security.
+
+- **Shopping Cart and Checkout:** Implement a fully functional shopping cart, enabling users to add, update, and remove items before seamless checkout.
+
+- **Order Processing:** Facilitate order creation, track orders, and calculate the total amount for a streamlined purchasing process.
+
+- **Review and Rating:** Allow users to submit reviews and ratings for products, fostering user engagement and trust.
+
+- **Wishlist Management:** Enable users to create and manage wishlists for a personalized shopping experience.
+
+- **Coupon System:** Implement a coupon system with unique codes and percentage-based discounts.
+
+## Getting Started
+
+To set up DEVLANT Full E-Commerce RESTful APIs locally and explore its features, follow the installation steps provided in the [Installation](#installation) section of the documentation.
 
 ## Installation
 
