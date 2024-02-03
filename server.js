@@ -6,6 +6,8 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const compression = require('compression');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const dotenv = require('dotenv');
 
 // Main Route
@@ -32,6 +34,39 @@ dbConnection();
 
 // Body Parser Middleware
 app.use(express.json());
+
+// Swagger API documentation
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: "3.0.0",
+        info: {
+            title: "DEVLANT E-COMMERCE APIS",
+            version: "1.0.0",
+            description: "API Documentation for Devlant E-commerce Application",
+            contact: {
+                name: "Ahmed Magdy",
+                email: "alshwwhy212@gmail.com",
+            }
+        },
+        servers: [
+            {
+                url: process.env.BASE_URL, // development server URL
+            },
+            {
+                url: process.env.PROD_URL, // production server URL
+            },
+        ],
+    },
+    apis: ["./routes/*.js"],
+};
+
+const spacs = swaggerJsdoc(swaggerOptions);
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(spacs)
+);
+
 
 // Static Files Middleware
 app.use(express.static(path.join(__dirname, 'uploads')))
