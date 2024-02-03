@@ -312,15 +312,6 @@ This concise overview outlines the core functionality of the authentication syst
 
 In DEVLANT Full E-Commerce RESTful APIs, we leverage the powerful `sharp` module for efficient and flexible image processing. This section provides a brief overview of how image processing is implemented using the `sharp` package.
 
-## Installation
-
-To integrate `sharp` into your project, ensure you have it installed by running:
-
-```bash
-npm install sharp
-
-
-
 ### API Documentation
 
 The API documentation is available using Swagger UI. Open the following URL in your browser:
