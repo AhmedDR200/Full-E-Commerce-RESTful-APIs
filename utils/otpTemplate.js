@@ -1,4 +1,4 @@
-const passwordResetTemplate = (user, resetCode) => `
+const otpTemplate = (user, resetCode) => `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -81,4 +81,4 @@ const passwordResetTemplate = (user, resetCode) => `
     </html>
 `;
 
-module.exports = passwordResetTemplate;
+module.exports = otpTemplate;

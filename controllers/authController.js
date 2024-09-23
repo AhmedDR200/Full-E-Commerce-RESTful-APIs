@@ -3,7 +3,7 @@ const Token = require("../models/token");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
 const asyncHandler = require("express-async-handler");
-const passwordResetTemplate = require("../utils/emailTemplate");
+const otpTemplate = require("../utils/otpTemplate");
 const tokens = require("../utils/createToken");
 const ApiError = require("../utils/apiError");
 const util = require("util");
@@ -213,14 +213,13 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // Generate the email content using the template
-  const htmlMessage = passwordResetTemplate(user, resetCode);
+  const otpMessage = otpTemplate(user, resetCode);
 
   try {
     await sendEmail({
       email: user.email,
       subject: "Your password reset code (Valid for 10 min)",
-      // message: htmlMessage,
-      html: htmlMessage,
+      html: otpMessage,
     });
   } catch (er) {
     user.passwordResetCode = undefined;
