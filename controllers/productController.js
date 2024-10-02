@@ -46,16 +46,19 @@ const getTopSoldProducts = asyncHandler(async (req, res) => {
 });
 
 /**
- * @desc    Get first 5 products
+ * @desc    Get first 5 products title , description and price
  * @route   GET /products/first5
  * @access  Public
  */
 const getFirst5Products = asyncHandler(async (req, res) => {
-  const products = await Product.find().limit(5);
+  const first5Products = await Product.aggregate([
+    { $project: { title: 1, description: 1, price: 1 } },
+    { $limit: 5 },
+  ]);
 
   res.status(200).json({
     status: "success",
-    data: products,
+    data: first5Products,
   });
 });
 

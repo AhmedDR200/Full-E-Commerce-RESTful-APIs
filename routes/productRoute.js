@@ -7,7 +7,8 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
-    getTopSoldProducts
+    getTopSoldProducts,
+    getFirst5Products
 } = require('../controllers/productController');
 
 const {
@@ -20,6 +21,7 @@ const {
 const { protect, allowedTo } = require("../controllers/authController");
 
 router.get('/top', getTopSoldProducts);
+router.get('/first5', getFirst5Products);
 
 router.route('/')
 .get(getProducts)
