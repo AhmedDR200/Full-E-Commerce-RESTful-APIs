@@ -7,8 +7,6 @@ const {
     getBrand,
     updateBrand,
     deleteBrand,
-    uploadBrandImage,
-    resizeBrandImage
 } = require('../controllers/brandController');
 
 const {
@@ -26,8 +24,6 @@ router.route('/')
 .post(
     protect,
     allowedTo('admin'),
-    uploadBrandImage,
-    resizeBrandImage,
     createBrandValidator,
     createBrand
 );
@@ -37,8 +33,6 @@ router.route('/:id')
 .patch(
     protect,
     allowedTo('admin'),
-    uploadBrandImage,
-    resizeBrandImage,
     updateBrandValidator,
     updateBrand
 )

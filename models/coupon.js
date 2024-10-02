@@ -14,7 +14,11 @@ const couponSchema = new mongoose.Schema({
     expiry: {
         type: Date,
         required: [true, 'Coupon expiry date is required'],
-    }
+    },
+    photos: {
+        type: Array,
+        default: [],
+    },
 }, {
     versionKey: false,
     timestamps: true,

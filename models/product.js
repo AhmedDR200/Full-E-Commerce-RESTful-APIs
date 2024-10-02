@@ -103,30 +103,5 @@ productSchema.pre(/^find/, function(next){
     next();
 });
 
-const setImageURL = (doc) => {
-    // return image base url + image name
-    if (doc.imageCover) {
-        const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`;
-        doc.imageCover = imageUrl;
-    }
-    if (doc.images) {
-        const images = [];
-        doc.images.forEach((image) => {
-            const imageUrl = `${process.env.BASE_URL}/products/${image}`;
-            images.push(imageUrl);
-        });
-        doc.images = images; // Update the doc.images property with the new array of image URLs
-    }
-};
-
-// With FindAll, FindOne and Update
-productSchema.post('init',(doc) =>{
-  setImageURL(doc);
-});
-// With Create
-productSchema.post('save', (doc) =>{
-  setImageURL(doc);
-});
-
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

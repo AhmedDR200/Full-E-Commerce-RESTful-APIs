@@ -1,7 +1,6 @@
-const asyncHandler = require('express-async-handler');
-const ApiError = require('../utils/apiError');
-const ApiFeatures = require('../utils/apiFeatures');
-
+const asyncHandler = require("express-async-handler");
+const ApiError = require("../utils/apiError");
+const ApiFeatures = require("../utils/apiFeatures");
 
 exports.deleteOne = (Model) =>
   asyncHandler(async (req, res, next) => {
@@ -15,84 +14,80 @@ exports.deleteOne = (Model) =>
     // Trigger "remove" event when update document
     // doc.remove();
     res.status(204).send();
-});
+  });
 
+exports.updateOne = (Model) =>
+  asyncHandler(async (req, res, next) => {
+    const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
 
-exports.updateOne = (Model) => 
-    asyncHandler(
-        async (req, res, next) => {
-            const doc = await Model.findByIdAndUpdate(req.params.id, req.body,{ new: true});
+    if (!doc) {
+      return next(new ApiError("Not Found", 404));
+    }
 
-            if(!doc){
-                return next(new ApiError('Not Found', 404));
-            }
+    // trigger "save" event update doc
+    doc.save();
 
-            // trigger "save" event update doc
-            doc.save();
-
-            res.status(200).json({
-                status: 'success',
-                data: {doc}
-            });
-});
-
+    res.status(200).json({
+      status: "success",
+      data: { doc },
+    });
+  });
 
 exports.createOne = (Model) =>
-    asyncHandler(
-        async (req, res) => {
-            const doc = await Model.create(req.body);
+  asyncHandler(async (req, res) => {
+    const doc = await Model.create(req.body);
 
-            res.status(201).json({
-                status: 'success',
-                data: {doc}
-            });
-});
-
+    res.status(201).json({
+      status: "success",
+      data: { doc },
+    });
+  });
 
 exports.getOne = (Model, populationOption) =>
-    asyncHandler(async (req, res) => {
-        const id = req.params.id;
-        // build query
-        let query = Model.findById(id);
-        if(populationOption){
-            query = query.populate(populationOption);
-        }
-        // execute query
-        const doc = await query;
-    
-        if (!doc) {
-        return next(new ApiError(`No doc found with that ID: ${id}`, 404));
-        }
-    
-        res.status(200).json({
-        status: 'success',
-        data: { doc },
-        });
-});
+  asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    // build query
+    let query = Model.findById(id);
+    if (populationOption) {
+      query = query.populate(populationOption);
+    }
+    // execute query
+    const doc = await query;
 
+    if (!doc) {
+      return next(new ApiError(`No doc found with that ID: ${id}`, 404));
+    }
 
-exports.getAll = (Model, modelName = '') => 
-    asyncHandler(async (req, res) => {
-        let filter = {};
-        if (req.filterObj) {
-        filter = req.filterObj;
-        }
-        // Build query
-        const documentsCounts = await Model.countDocuments();
-        const apiFeatures = new ApiFeatures(Model.find(filter), req.query)
-        .paginate(documentsCounts)
-        .filter()
-        .search(modelName)
-        .limitFields()
-        .sort();
+    res.status(200).json({
+      status: "success",
+      data: { doc },
+    });
+  });
 
-        // Execute query
-        const { mongooseQuery, paginationResult } = apiFeatures;
-        const documents = await mongooseQuery;
+exports.getAll = (Model, modelName = "") =>
+  asyncHandler(async (req, res) => {
+    let filter = {};
+    if (req.filterObj) {
+      filter = req.filterObj;
+    }
+    // Build query
+    const documentsCounts = await Model.countDocuments();
+    const apiFeatures = new ApiFeatures(Model.find(filter), req.query)
+      .paginate(documentsCounts)
+      .filter()
+      .search(modelName)
+      .limitFields()
+      .sort();
 
-        res.status(200).json({
-            results: documents.length,
-            paginationResult,
-            data: documents 
-        });
-});
+    // Execute query
+    const { mongooseQuery, paginationResult } = apiFeatures;
+    const documents = await mongooseQuery;
+
+    res.status(200).json({
+      results: documents.length,
+      paginationResult,
+      data: documents,
+    });
+  });

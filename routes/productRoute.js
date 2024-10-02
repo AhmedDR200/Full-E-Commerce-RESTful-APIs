@@ -7,8 +7,7 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
-    uploadProductImages,
-    resizeProductImages
+    getTopSoldProducts
 } = require('../controllers/productController');
 
 const {
@@ -20,14 +19,13 @@ const {
 
 const { protect, allowedTo } = require("../controllers/authController");
 
+router.get('/top', getTopSoldProducts);
 
 router.route('/')
 .get(getProducts)
 .post(
     protect,
     allowedTo('admin'),
-    uploadProductImages,
-    resizeProductImages,
     createProductValidator,
     createProduct
 );
@@ -41,8 +39,6 @@ router.route('/:id')
 .patch(
     protect,
     allowedTo('admin'),
-    uploadProductImages,
-    resizeProductImages,
     updateProductValidator,
     updateProduct
 )

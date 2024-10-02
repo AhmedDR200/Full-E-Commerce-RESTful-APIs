@@ -6,9 +6,7 @@ const
 createCategory,
 getCategory,
 updateCategory,
-deleteCategory,
-uploadCategoryImage,
-resizeCategoryImage} 
+deleteCategory,} 
 = require('../controllers/catController');
 
 const { protect, allowedTo } = require("../controllers/authController");
@@ -27,8 +25,6 @@ router.route('/')
 .post(
     protect,
     allowedTo('admin'),
-    uploadCategoryImage,
-    resizeCategoryImage,
     createCategoryValidator,
     createCategory
 );
@@ -42,8 +38,6 @@ router.route('/:id')
 .patch(
     protect,
     allowedTo('admin'),
-    uploadCategoryImage,
-    resizeCategoryImage,
     updateCategoryValidator,
     updateCategory
 )
