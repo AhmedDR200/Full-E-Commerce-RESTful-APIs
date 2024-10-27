@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=Development
+      - PORT=3000
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+    image: ahmedmagdy007/e-commerce-app:v1.0
+    container_name: e-commerce-cont

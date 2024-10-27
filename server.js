@@ -1,6 +1,6 @@
 // Core Moudles
 const path = require('path')
-
+const fs = require('fs');
 // 3rd Party Moudles
 const express = require('express');
 const morgan = require('morgan');
@@ -9,20 +9,20 @@ const compression = require('compression');
 const hpp = require('hpp');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
 const dotenv = require('dotenv');
+const figlet = require('figlet');
 
 // Main Route
-const mountRoutes = require('./routes/mainRoute');
+const mountRoutes = require('./src/routes/mainRoute');
 
 // Webhook Controller
-const { webhookCheckout } = require('./controllers/orderController');
+const { webhookCheckout } = require('./src/controllers/orderController');
 
 // Utils
-const ApiError = require('./utils/apiError');
-const globalError = require('./middlewares/errorMiddleware');
+const ApiError = require('./src/utils/apiError');
+const globalError = require('./src/middlewares/errorMiddleware');
 dotenv.config();
+
 
 // Express app
 const app = express();
@@ -41,8 +41,7 @@ app.post('/webhook-checkout',
 );
 
 // Database connection
-const dbConnection = require('./config/db');
-dbConnection();
+require('./src/config/db')();
 
 // Body Parser Middleware => limit the body size to 20kb
 app.use(express.json({limit: '20kb'}));
@@ -59,44 +58,11 @@ app.use(hpp({
     ]
 }));
 
-// Swagger API documentation
-const swaggerOptions = {
-    swaggerDefinition: {
-        openapi: "3.0.0",
-        info: {
-            title: "DEVLANT E-COMMERCE APIS",
-            version: "1.0.0",
-            description: "API Documentation for Devlant E-commerce Application",
-            contact: {
-                name: "Ahmed Magdy",
-                email: "alshwwhy212@gmail.com",
-            }
-        },
-        servers: [
-            {
-                url: process.env.BASE_URL, // development server URL
-            },
-            {
-                url: process.env.PROD_URL, // production server URL
-            },
-        ],
-    },
-    apis: ["./routes/*.js"],
-};
-
-const spacs = swaggerJsdoc(swaggerOptions);
-app.use(
-    "/api-docs",
-    swaggerUi.serve,
-    swaggerUi.setup(spacs)
-);
-
-
 // Static Files Middleware
 app.use(express.static(path.join(__dirname, 'uploads')))
 
 // Morgan Middleware => Logging
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'Development') {
     app.use(morgan('dev'));
 }
 
@@ -116,9 +82,6 @@ mountRoutes(app);
 
 // 404 Error Handling Middleware
 app.all('*', (req, res, next) => {
-    // const err = new Error(`Can't find ${req.originalUrl} on this server`);
-    // err.status = 'fail';
-    // err.statusCode = 404;
     next(new ApiError(`Can't find ${req.originalUrl} on this server`, 400));
 });
 
@@ -126,10 +89,22 @@ app.all('*', (req, res, next) => {
 app.use(globalError);
 
 // Server Connection
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`server (${process.env.NODE_ENV}) listening at http://localhost:${port}`)
-});
+const startServer = () => {
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+        figlet('Server Running!', (err, data) => {
+            if (err) {
+                console.log('Error generating ASCII art.'.red.bold);
+                console.dir(err);
+                return;
+            }
+            console.log(data.cyan); // ASCII art in cyan
+            console.log(`Environment: ${process.env.NODE_ENV || 'development'}`.magenta.bold);
+            console.log(`Listening at: http://localhost:${port}`.yellow.bold);
+        });
+    });
+};
+startServer();
 
 // Events => Event Loop => Callback Queue => Event Loop => Event Handler
 process.on('uncaughtException', (err) => {

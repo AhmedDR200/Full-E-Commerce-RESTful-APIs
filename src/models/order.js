@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { strategy } = require('sharp');
 
 const orderSchema = new mongoose.Schema({
     user : {

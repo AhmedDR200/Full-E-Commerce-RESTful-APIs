@@ -3,7 +3,6 @@
 //         The ApiError object is used to differentiate between operational errors and programming errors.
 //         The ApiError object is used to send the error message and the status code to the client.
 
-
 class ApiError extends Error{
     constructor(message, statusCode){
         super(message);
@@ -12,6 +11,5 @@ class ApiError extends Error{
         this.isOperational = true; // This is used to differentiate between operational errors and programming errors
     }
 };
-
 
 module.exports = ApiError;

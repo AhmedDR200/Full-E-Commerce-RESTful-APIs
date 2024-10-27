@@ -25,9 +25,13 @@ exports.signup = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     status: "success",
-    data: sanitizeUser(user),
-    accessToken: accessToken,
-    refreshToken: refreshToken,
+    data: {
+      user: sanitizeUser(user),
+      tokens: {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      },
+    },
   });
 });
 
@@ -59,9 +63,13 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: sanitizeUser(user),
-    accessToken: accessToken,
-    refreshToken: refreshToken,
+    data: {
+      user: sanitizeUser(user),
+      tokens: {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      },
+    },
   });
 });
 
@@ -299,8 +307,12 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    message: "Password reset Successfully",
-    accessToken: accessToken,
-    refreshToken: refreshToken,
+    data: {
+      user: sanitizeUser(user),
+      tokens: {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      },
+    },
   });
 });
