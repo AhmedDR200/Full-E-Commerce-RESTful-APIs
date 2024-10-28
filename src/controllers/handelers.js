@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/apiError");
 const ApiFeatures = require("../utils/apiFeatures");
 
+// Delete one document
 exports.deleteOne = (Model) =>
   asyncHandler(async (req, res, next) => {
     const { id } = req.params;
@@ -16,6 +17,7 @@ exports.deleteOne = (Model) =>
     res.status(204).send();
   });
 
+// Update one document
 exports.updateOne = (Model) =>
   asyncHandler(async (req, res, next) => {
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
@@ -35,6 +37,7 @@ exports.updateOne = (Model) =>
     });
   });
 
+// Create one document
 exports.createOne = (Model) =>
   asyncHandler(async (req, res) => {
     const doc = await Model.create(req.body);
@@ -45,6 +48,7 @@ exports.createOne = (Model) =>
     });
   });
 
+// Get one document
 exports.getOne = (Model, populationOption) =>
   asyncHandler(async (req, res) => {
     const id = req.params.id;
@@ -66,6 +70,7 @@ exports.getOne = (Model, populationOption) =>
     });
   });
 
+// Get all documents
 exports.getAll = (Model, modelName = "") =>
   asyncHandler(async (req, res) => {
     let filter = {};

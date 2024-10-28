@@ -13,3 +13,11 @@ services:
       - /app/node_modules
     image: ahmedmagdy007/e-commerce-app:v1.0
     container_name: e-commerce-cont
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    container_name: redis-cont
+    ports:
+      - "6379:6379"
