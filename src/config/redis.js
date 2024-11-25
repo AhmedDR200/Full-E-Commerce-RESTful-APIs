@@ -1,19 +1,13 @@
-const redis = require('redis');
+// redisClient.js
+const { Redis } = require('@upstash/redis');
 
-const redisHost = process.env.REDIS_HOST || 'redis';
-const redisPort = process.env.REDIS_PORT || 6379;
+if (!process.env.UPSTASH_REDIS_URL || !process.env.UPSTASH_REDIS_TOKEN) {
+  throw new Error("Upstash Redis URL and Token must be set in environment variables.");
+}
 
-const redisClient = redis.createClient({
-  host: redisHost,
-  port: redisPort
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_URL,
+  token: process.env.UPSTASH_REDIS_TOKEN,
 });
 
-redisClient.on('connect', () => {
-  console.log('Connected to Redis');
-});
-
-redisClient.on('error', (err) => {
-  console.error('Redis error:', err);
-});
-
-module.exports = redisClient;
+module.exports = redis;
