@@ -18,13 +18,15 @@ const {
     deleteProductValidator
 } = require('../validators/productValidator');
 
+const { cacheMiddleware } = require("../middlewares/redisMiddleware.js");
+
 const { protect, allowedTo } = require("../controllers/authController");
 
 router.get('/top', getTopSoldProducts);
 router.get('/first5', getFirst5Products);
 
 router.route('/')
-.get(getProducts)
+.get(cacheMiddleware("products"), getProducts)
 .post(
     protect,
     allowedTo('admin'),

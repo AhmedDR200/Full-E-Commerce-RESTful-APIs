@@ -16,11 +16,12 @@ const {
     deleteBrandValidator
 } = require('../validators/brandValidator');
 
+const { cacheMiddleware } = require("../middlewares/redisMiddleware.js");
 const { protect, allowedTo } = require("../controllers/authController");
 
 
 router.route('/')
-.get(getBrands)
+.get(cacheMiddleware("brands"), getBrands)
 .post(
     protect,
     allowedTo('admin'),

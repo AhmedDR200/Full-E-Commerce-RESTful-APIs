@@ -9,6 +9,8 @@ updateCategory,
 deleteCategory,} 
 = require('../controllers/catController');
 
+const { cacheMiddleware } = require("../middlewares/redisMiddleware.js");
+
 const { protect, allowedTo } = require("../controllers/authController");
 
 const 
@@ -21,7 +23,7 @@ deleteCategoryValidator}
 
 
 router.route('/')
-.get(getCategories)
+.get(cacheMiddleware("cats"), getCategories)
 .post(
     protect,
     allowedTo('admin'),
